@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Recharge {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String   @db.ObjectId
+  mobileNumber   String
+  operator       Operator
+  amount         Float
+  status         RechargeStatus @default(PENDING)
+  transactionId  String   @unique
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+enum Operator {
+  JIO
+  AIRTEL
+  VI
+  BSNL
+}
+
+enum RechargeStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
