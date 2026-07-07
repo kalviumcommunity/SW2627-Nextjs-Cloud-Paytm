@@ -1,14 +1,10 @@
-import * as rechargeService from '../services/rechargeService.js';
+const createRecharge = (req, res) => {
+  res.status(201).json({
+    success: true,
+    message: "Recharge request received",
+  });
+};
 
-export const createRecharge = async (req, res, next) => {
-    try {
-        const recharge = await rechargeService.createRecharge(req.body);
-        res.status(201).json({
-            success: true,
-            message: "Recharge initiated successfully",
-            data: recharge,
-        });
-    } catch (error) {
-        next(error);
-    }
+module.exports = {
+  createRecharge,
 };
