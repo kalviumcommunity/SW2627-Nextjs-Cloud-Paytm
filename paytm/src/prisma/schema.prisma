@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+//User Table for database
+model User {
+  id          String      @id @default(uuid())
+
+  name        String
+  email       String      @unique
+  password    String
+
+  phoneNumber String      @unique
+
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  recharges   Recharge[]
+
+  @@index([email])
+  @@index([phoneNumber])
+}
+//Recharge table for every user
+model Recharge {
+  id             String   @id @default(uuid())
+  userId         String   
+  user           User     @relation(fields: [userId], references: [id])
+  mobileNumber   String
+  operator       Operator
+  amount         Float
+  status         RechargeStatus @default(PENDING)
+  transactionId  String   @unique
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  @@index([userId])
+  @@index([mobileNumber])
+  @@index([status])
+}
+enum Operator {
+  JIO
+  AIRTEL
+  VI
+  BSNL
+}
+
+enum RechargeStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}

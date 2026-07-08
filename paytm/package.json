@@ -2,6 +2,9 @@
   "name": "paytm",
   "version": "0.1.0",
   "private": true,
+  "prisma": {
+    "schema": "./src/prisma/schema.prisma"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -9,7 +12,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.8.0",
     "next": "16.2.10",
+    "pg": "^8.22.0",
     "react": "19.2.4",
     "react-dom": "19.2.4"
   },
