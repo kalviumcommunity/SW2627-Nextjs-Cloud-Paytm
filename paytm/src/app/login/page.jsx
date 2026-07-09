@@ -1,92 +1,69 @@
 export default function Login() {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
-      <div className="w-full max-w-lg bg-white rounded-2xl shadow-xl p-8">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
 
         {/* Heading */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-blue-600">
-            Paytm Recharge
+          <h1 className="text-4xl font-bold text-blue-600">
+            Recharge System
           </h1>
-          <p className="text-gray-500 mt-2">
-            Welcome! Please login to continue
+
+          <p className="mt-2 text-gray-500">
+            Welcome Back! Login to continue
           </p>
         </div>
 
         {/* Form */}
         <form className="space-y-5">
 
-          {/* Name */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Full Name
-            </label>
-            <input
-              type="text"
-              placeholder="John Doe"
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
           {/* Email */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Email Address
             </label>
+
             <input
               type="email"
-              placeholder="john@example.com"
+              placeholder="Enter your email"
               className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
-          {/* Mobile */}
+          {/* Password */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Mobile Number
+              Password
             </label>
+
             <input
-              type="tel"
-              placeholder="+91 9876543210"
+              type="password"
+              placeholder="Enter your password"
               className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
-          {/* Remember & Forgot */}
-          <div className="flex items-center justify-between text-sm">
-            <label className="flex items-center gap-2">
-              <input type="checkbox" />
-              Remember Me
-            </label>
-
-            <a
-              href="#"
-              className="text-blue-600 hover:underline"
-            >
-              Forgot Password?
-            </a>
-          </div>
-
-          {/* Button */}
+          {/* Login Button */}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+            className="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white hover:bg-blue-700 transition"
           >
             Login
           </button>
 
-          {/* Register */}
-          <p className="text-center text-gray-600 text-sm">
+          {/* Register Link */}
+          <p className="text-center text-sm text-gray-600">
             Don't have an account?{" "}
             <a
-              href="#"
-              className="text-blue-600 font-semibold hover:underline"
+              href="/register"
+              className="font-semibold text-blue-600 hover:underline"
             >
-              Register
+              Register Now
             </a>
           </p>
 
         </form>
+
       </div>
     </div>
   );
