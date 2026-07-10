@@ -5,9 +5,7 @@ import { generateToken } from "@/lib/jwt";
 
 export async function POST(req) {
     try{
-
-    const cookieStore = await cookies();
-
+ const cookieStore = await cookies();
     const {
         email,
         password,
