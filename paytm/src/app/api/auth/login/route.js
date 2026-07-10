@@ -1,0 +1,73 @@
+import { cookies } from "next/headers";
+import bcrypt from "bcryptjs";
+
+import { generateToken } from "@/lib/jwt";
+
+export async function POST(req) {
+    try{
+
+    const cookieStore = await cookies();
+
+    const {
+        email,
+        password,
+    } = await req.json();
+   const existingUser = await prisma.user.findUnique({
+        where: { email },
+    });
+
+    if (!existingUser){
+        return Response.json(
+            {
+                success: false,
+                message: "User not found",
+            },
+            {
+                status: 404,
+            }
+        );
+    }
+
+    const isPasswordCorrect =
+        await bcrypt.compare(password, existingUser.password);
+
+    if (!isPasswordCorrect) {
+        return Response.json(
+            {
+                success: false,
+                message: "Invalid Credentials",
+            },
+            {
+                status: 401,
+            }
+        );
+    }
+
+    const token = generateToken({
+        id: existingUser.id,
+        email: existingUser.email,
+    });
+
+    cookieStore.set("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 60 * 60,
+        path: "/",
+    });
+
+    return Response.json({
+        success: true,
+        message: "Login Successful",
+    });
+}catch(error){
+    console.error("Login error:", error);
+    return Response.json(
+        {
+            success: false,
+            message: "Internal Server Error",
+        },
+        {
+            status: 500,
+        }
+    );
+}}
