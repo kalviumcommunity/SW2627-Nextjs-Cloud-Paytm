@@ -1,4 +1,26 @@
+"use client";
+import {useState} from "react";
+import {login} from "@/services/auth"
+
+
 export default function Login() {
+
+  const [formData , setFormData] = useState({
+    email:"",
+    password:""
+  });
+
+  function handleChange(e){
+    setFormData((prev)=>({...prev , [e.target.name]:e.target.value}))
+
+  }
+
+  async function handleSubmit(e){
+    e.preventDefault();
+    await login(formData);
+    alert("logged in successfully")
+
+  }
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
@@ -15,7 +37,7 @@ export default function Login() {
         </div>
 
         {/* Form */}
-        <form className="space-y-5">
+        <form className="space-y-5" onSubmit={handleSubmit}>
 
           {/* Email */}
           <div>
@@ -27,6 +49,10 @@ export default function Login() {
               type="email"
               placeholder="Enter your email"
               className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+
             />
           </div>
 
@@ -40,6 +66,9 @@ export default function Login() {
               type="password"
               placeholder="Enter your password"
               className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
             />
           </div>
 
