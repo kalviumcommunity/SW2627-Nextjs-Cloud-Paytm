@@ -2,14 +2,29 @@ import { cookies } from "next/headers";
 import bcrypt from "bcryptjs";
 import prisma from "@/lib/prisma";
 import { generateToken } from "@/lib/jwt";
+import { loginSchema } from "@/validations/authValidation";
 
 export async function POST(req) {
     try{
  const cookieStore = await cookies();
+ const body = await req.json();
+
+ const validation = loginSchema.safeParse(body);
+
+ if(!validation.success){
+    return Response.json({
+        success:false,
+        errors:validation.error.issues
+    },{
+        status:400
+    })
+ }
+
+
     const {
         email,
         password,
-    } = await req.json();
+    } = validation.data;
    const existingUser = await prisma.user.findUnique({
         where: { email },
     });

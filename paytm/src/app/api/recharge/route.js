@@ -1,9 +1,23 @@
 import { auth } from "@/lib/auth";
-import prisma from "@/lib/prisma";
+import prisma from "@/lib/prisma"; 
+import { rechargeSchema } from "@/validations/rechargeValidation";
 
 export async function POST(req) {
   try {
-    const { mobileNumber, operator, amount } = await req.json();
+    const body = await req.json();
+
+    const validation = rechargeSchema.safeParse(body);
+
+    if(!validation.success){
+      return Response.json({
+        success:false ,
+        errors:validation.error.issues
+
+      },{
+        status:400
+      })
+    }
+    const { mobileNumber, operator, amount } = validation.data;
 
     // Authenticate user
     const user = await auth();
@@ -100,3 +114,109 @@ export async function POST(req) {
     );
   }
 }
+
+
+export async function GET(req){
+  try {
+
+    const user= await auth();
+  const { searchParams } = new URL(req.url);
+  const operator = searchParams.get("operator");
+  const date = searchParams.get("date");
+  
+
+     if (!user) {
+      return Response.json(
+        {
+          success: false,
+          message: "Unauthorized",
+        },
+        {
+          status: 401,
+        }
+    );}
+
+    const where = {
+    userId: user.id,
+};
+
+if (operator) {
+    where.operator = operator;
+}
+
+if(date){
+  const start = new Date(date);
+
+  if (isNaN(start.getTime())) {
+        return Response.json(
+            {
+                success: false,
+                message: "Invalid date format",
+            },
+            {
+                status: 400,
+            }
+        );
+}
+const end = new Date(date);
+end.setDate(end.getDate() + 1);
+where.createdAt = {
+    gte: start,
+    lt: end,
+};
+
+}
+const recharges = await prisma.recharge.findMany({
+    where,
+    orderBy: {
+        createdAt: "desc",
+    },
+});
+
+return Response.json(
+    {
+        success: true,
+        recharges,
+    },
+    {
+        status: 200,
+    }
+);
+
+
+
+    
+  } catch (error) {
+
+    console.error(error);
+
+        return Response.json(
+            {
+                success: false,
+                message: "Internal Server Error",
+            },
+            {
+                status: 500,
+            }
+        );
+    }
+
+
+
+
+
+    
+  }
+
+
+
+
+    
+
+
+
+
+
+
+
+    

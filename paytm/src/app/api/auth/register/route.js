@@ -2,24 +2,62 @@ import prisma from"@/lib/prisma.js";
 import {generateToken} from "@/lib/jwt.js";
 import {cookies} from "next/headers";
 import bcrypt from "bcryptjs";
+import { registerSchema } from "@/validations/authValidation";
 
 
 
 export async function POST(req) {
     try{
     const cookieStore = await cookies();
-    const { name, email, password, phoneNumber } = await req.json();
+    const body = await req.json();
+    const validation = registerSchema.safeParse(body);
+
+    if(!validation.success){
+        return Response.json({
+            success:false,
+            errors:validation.error.issues
+        } , {
+            status:400
+        })
+    }
+
+    const { name, email, password, phoneNumber } = validation.data;
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Check if the user already exists
-    const existingUser = await prisma.user.findUnique({
-        where: { email },
-    });
-    if (existingUser) {
-        return new Response(JSON.stringify({ error: "User already exists" }), {
-            status: 400,
-        });
+    const existingUser = await prisma.user.findFirst({
+    where: {
+        OR: [
+            { email },
+            { phoneNumber }
+        ]
     }
+});
+
+if (existingUser) {
+    if (existingUser.email === email) {
+        return Response.json(
+            {
+                success: false,
+                message: "Email already exists.",
+            },
+            {
+                status: 409,
+            }
+        );
+    }
+
+    if (existingUser.phoneNumber === phoneNumber) {
+        return Response.json(
+            {
+                success: false,
+                message: "Phone number already exists.",
+            },
+            {
+                status: 409,
+            }
+        );
+    }
+}
 
     // Create a new user
     const user = await prisma.user.create({
@@ -42,9 +80,20 @@ export async function POST(req) {
         path: "/",
     });
 
-    return new Response(JSON.stringify({ token }), {
+    return Response.json(
+    {
+        success: true,
+        message: "Registration successful",
+        user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+        },
+    },
+    {
         status: 201,
-    });
+    }
+);
 
 }catch (error) {
     console.error("Error during registration:", error);
