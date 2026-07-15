@@ -1,26 +1,49 @@
 "use client";
 import {useState} from "react";
-import {login} from "@/services/auth"
+import {login} from "@/services/auth";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 
 export default function Login() {
+  const router = useRouter();
 
   const [formData , setFormData] = useState({
     email:"",
     password:""
   });
+  const [loading, setLoading] = useState(false);
 
   function handleChange(e){
     setFormData((prev)=>({...prev , [e.target.name]:e.target.value}))
 
   }
 
-  async function handleSubmit(e){
+  async function handleSubmit(e) {
     e.preventDefault();
-    await login(formData);
-    alert("logged in successfully")
 
-  }
+    setLoading(true);
+
+    try {
+        const response = await login(formData);
+
+        if (response.data.success) {
+            alert("Logged in successfully");
+            router.push("/dashboard");
+        } else {
+            alert(response.data.message);
+        }
+    } catch (error) {
+        alert(
+            error.response?.data?.message ||
+            "Something went wrong"
+        );
+    }finally {
+        setLoading(false);
+    }
+}
+
+
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
@@ -74,21 +97,22 @@ export default function Login() {
 
           {/* Login Button */}
           <button
-            type="submit"
-            className="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white hover:bg-blue-700 transition"
-          >
-            Login
-          </button>
+    type="submit"
+    disabled={loading}
+    className="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white disabled:bg-gray-400"
+>
+    {loading ? "Logging in..." : "Login"}
+</button>
 
           {/* Register Link */}
           <p className="text-center text-sm text-gray-600">
-            Don't have an account?{" "}
-            <a
+            Don&apos;t have an account?{" "}
+            <Link
               href="/register"
               className="font-semibold text-blue-600 hover:underline"
             >
               Register Now
-            </a>
+            </Link>
           </p>
 
         </form>

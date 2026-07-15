@@ -11,3 +11,6 @@ export const login = (data)=>{
 export const register = (data)=>{
     return api.post("/auth/register" , data);
 };
+
+
+
