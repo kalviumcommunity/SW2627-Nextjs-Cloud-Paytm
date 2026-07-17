@@ -5,6 +5,6 @@ export const createRecharge = (data)=>{
     return api.post("/recharge" , data)
 }
 
-export const getRecharges = (params)=>{
-    return api.get("/recharge" , {params})
+export const getRecharges = (filters)=>{
+    return api.get("/recharge" , {params:filters})
 }

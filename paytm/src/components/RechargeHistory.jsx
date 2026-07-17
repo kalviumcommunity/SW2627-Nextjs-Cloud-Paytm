@@ -3,11 +3,11 @@ import { useState , useEffect } from "react";
 import { getRecharges } from "@/services/recharge";
 import StatusBadge from "./StatusBadge";
 
-export default function RechargeHistory() {
+export default function RechargeHistory({filters}) {
     const [recharges , setRecharge] = useState([]);
     const fetchHistory = async()=>{
         try{
-            const response  = await getRecharges();
+            const response  = await getRecharges(filters);
             setRecharge(response.data.recharges)
 
         }catch(err){
@@ -16,8 +16,15 @@ export default function RechargeHistory() {
         }
     }
     useEffect(() => {
-    fetchHistory();
-}, []);
+        const interval = setInterval(() => {
+             fetchHistory();
+
+            
+        }, 5000);
+
+        return ()=>clearInterval(interval)
+   
+}, [filters]);
 
     return (
         <div className="mt-10 bg-white p-5 rounded shadow">
