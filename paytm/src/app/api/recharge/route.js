@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma"; 
 import { rechargeSchema } from "@/validations/rechargeValidation";
+import { date } from "zod";
 
 export async function POST(req) {
   try {
@@ -89,6 +90,27 @@ export async function POST(req) {
         // status: "PENDING" // Optional, Prisma already defaults it
       },
     });
+
+    setTimeout(async () => {
+      try {
+
+        const status = Math.random()<0.8 ? "SUCCESS" : "FAILURE";
+
+        await prisma.recharge.update({
+          where:{
+          id:recharge.id},
+          data:{
+          status}
+        })
+        console.log(`${recharge.id} updated status to ${status}`)
+        
+      } catch (error) {
+        console.log(error)
+        
+      }
+
+      
+    }, 5000);
 
     return Response.json(
       {
