@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createRecharge } from "@/services/recharge";
+import { rechargeSchema } from "@/validations/rechargeValidation";
 
 export default function RechargeForm({onSuccess}) {
    const [formData , setFormData] = useState({
@@ -11,6 +12,7 @@ export default function RechargeForm({onSuccess}) {
 
    })
    const [loading ,setLoading] = useState(false);
+   const [errors, setErrors] = useState({});
 
    function handleChange(e){
 
@@ -20,11 +22,24 @@ export default function RechargeForm({onSuccess}) {
 
    const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrors({});
     const { mobileNumber, operator, amount } = formData;
 
     setLoading(true);
 
     try {
+      
+      const validation = rechargeSchema.safeParse(formData);
+      
+      if(!validation.success){
+        
+        const newErrors={};
+        validation.error.issues.forEach((issue)=>{
+          newErrors[issue.path[0]]= issue.message;
+        })
+        setErrors(newErrors);
+        return;
+      }
         const response = await createRecharge({
             mobileNumber,
             operator,
@@ -60,6 +75,7 @@ if(!response.success){
             <label className="block mb-2 text-sm font-medium text-gray-700">
               Mobile number
             </label>
+            
 
             <input
               type="text"
@@ -71,6 +87,12 @@ if(!response.success){
               onChange={handleChange}
             />
           </div>
+          {errors.mobileNumber && (
+    <p className="text-red-500 text-sm mt-1">
+        {errors.mobileNumber}
+    </p>
+)}
+           
 
           
           <div>
@@ -90,6 +112,11 @@ if(!response.success){
     <option value="VI">VI</option>
     <option value="BSNL">BSNL</option>
   </select>
+    {errors.operator && (
+    <p className="text-red-500 text-sm mt-1">
+        {errors.operator}
+    </p>
+)}
 </div>
           
 
@@ -106,6 +133,11 @@ if(!response.success){
               className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                name="amount" value={formData.amount} onChange={handleChange}
             />
+            {errors.amount && (
+    <p className="text-red-500 text-sm mt-1">
+        {errors.amount}
+    </p>
+)}
           </div>
 
           
