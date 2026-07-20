@@ -6,7 +6,7 @@ export function proxy(req) {
 
     const token = req.cookies.get("token")?.value;
 
-    console.log("Token:", token);
+    //console.log("Token:", token);
 
     if (!token) {
         console.log("No token");
@@ -16,7 +16,7 @@ export function proxy(req) {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        console.log("Verified:", decoded);
+        //console.log("Verified:", decoded);
 
         return NextResponse.next();
     } catch (err) {

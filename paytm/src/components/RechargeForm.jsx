@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { createRecharge } from "@/services/recharge";
 
-export default function RechargeForm() {
+export default function RechargeForm({onSuccess}) {
    const [formData , setFormData] = useState({
     mobileNumber:"",
     operator:"",
@@ -38,9 +38,9 @@ export default function RechargeForm() {
         operator: "",
         amount: "",
     }) 
+    onSuccess();
 }
 if(!response.success){
-    alert(response.message);
     return;
 
 }

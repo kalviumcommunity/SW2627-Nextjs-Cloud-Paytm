@@ -18,6 +18,8 @@ export default function Dashboard() {
 
     })
 
+    const [refreshKey , setRefreshKey] = useState(0);
+
     function handleApply(){
         setAppliedFilters(filters)
     }
@@ -39,7 +41,7 @@ export default function Dashboard() {
             <Navbar />
 
             <div className="max-w-6xl mx-auto p-6">
-                <RechargeForm />
+                <RechargeForm  onSuccess={(prev)=>setRefreshKey(prev+1)} />
                  <FilterBar
                 filters={filters}
                 setFilters={setFilters}
@@ -47,7 +49,8 @@ export default function Dashboard() {
                 onReset={handleReset}
             />
 
-                <RechargeHistory filters={appliedFilters}/>
+                <RechargeHistory filters={appliedFilters} 
+                refreshKey = {refreshKey}/>
             </div>
         </div>
     );
