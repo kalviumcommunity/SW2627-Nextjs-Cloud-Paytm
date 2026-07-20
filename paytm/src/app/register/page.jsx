@@ -1,9 +1,10 @@
 "use client";
 import { useState } from "react";
 import {register} from "@/services/auth";
-
+import { useRouter } from "next/navigation";
 
 export default function Register() {
+  const router = useRouter();
 
   const [formData, setFormData] = useState({
     name:"",
@@ -15,31 +16,30 @@ export default function Register() {
     const handleChange=(e)=>{
       setFormData((prev)=>({...prev , [e.target.name]:e.target.value}));
 }
-
-  
-
-    
-
     const handleSubmit = async (e) => {
   e.preventDefault();
+  if ( !formData.name || !formData.email || !formData.phoneNumber || !formData.password || !formData.confirmPassword) {
+      alert("Please fill in all fields");
+      return;
+    }
 
   if (formData.password !== formData.confirmPassword) {
     alert("Passwords do not match");
     return;
   }
-
+ 
   try {
-    await register({
+    const response =await register({
       name: formData.name,
       email: formData.email,
       phoneNumber: formData.phoneNumber,
       password: formData.password,
     });
-
+    if (response.data.success) {
     alert("Registration successful!");
+    router.push("/dashboard");}
   } catch (err) {
-    alert("Registration failed");
-    console.error(err);
+    alert(err.response?.data?.message || "Registration failed");
   }
 };
 
