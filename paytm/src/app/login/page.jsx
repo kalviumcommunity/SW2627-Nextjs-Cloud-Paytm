@@ -4,6 +4,8 @@ import {login} from "@/services/auth";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { loginSchema } from "@/validations/authValidation";
+import toast from "react-hot-toast";
+
 
 
 
@@ -46,13 +48,13 @@ export default function Login() {
         const response = await login(validation.data);
 
         if (response.data.success) {
-            alert("Logged in successfully");
+            toast.success("Logged in successfully");
             router.push("/dashboard");
         } else {
-            alert(response.data.message);
+            toast.error(response.data.message);
         }
     } catch (error) {
-        alert(
+        toast.error(
             error.response?.data?.message ||
             "Something went wrong"
         );

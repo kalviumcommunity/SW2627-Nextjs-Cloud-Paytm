@@ -3,6 +3,7 @@ import { useState } from "react";
 import {register} from "@/services/auth";
 import { useRouter } from "next/navigation";
 import { registerSchema } from "@/validations/authValidation";
+import toast from "react-hot-toast";
 import Link from "next/link";
 
 export default function Register() {
@@ -48,10 +49,10 @@ export default function Register() {
       password: formData.password,
     });
     if (response.data.success) {
-    alert("Registration successful!");
+    toast.success("Registration successful!");
     router.push("/dashboard");}
   } catch (err) {
-    alert(err.response?.data?.message || "Registration failed");
+    toast.error(err.response?.data?.message || "Registration failed");
   }
 };
 
