@@ -3,11 +3,19 @@ import { z } from "zod";
 export const rechargeSchema = z.object({
   mobileNumber: z
     .string()
-    .min(1, "Mobile number is required.")
-    .regex(/^\d{10}$/, "Mobile number must be exactly 10 digits."),
+    .refine((value)=> value.length>0 , {
+      message:"Mobile number is required"
+    }) 
+    .refine((value)=> /^\d{10}$/.test(value), {
+      message:
+        "Mobile number must be exactly 10 digits."
+      }
+     )
+    ,
 
  operator: z
     .string()
+    .refine((value)=>value!="" , {message:"Operator is required"})
     .refine(
       (value) => ["JIO", "AIRTEL", "VI", "BSNL"].includes(value),
       {
@@ -15,9 +23,23 @@ export const rechargeSchema = z.object({
       }
     ),
 
-  amount: z.coerce
-    .number({
-      message: "Please enter a valid amount.",
-    })
-    .positive("Amount must be greater than 0."),
+  amount: z
+     .refine(
+      (value) => value !== "",
+      {
+        message: "Amount is required.",
+      }
+    )
+    .refine(
+      (value) => !isNaN(Number(value)),
+      {
+        message: "Please enter a valid amount.",
+      }
+    )
+    .refine(
+      (value) => Number(value) > 0,
+      {
+        message: "Amount must be greater than 0.",
+      }
+    ),
 });

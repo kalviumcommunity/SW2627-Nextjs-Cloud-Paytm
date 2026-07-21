@@ -2,6 +2,8 @@
 import { useState } from "react";
 import {register} from "@/services/auth";
 import { useRouter } from "next/navigation";
+import { registerSchema } from "@/validations/authValidation";
+import Link from "next/link";
 
 export default function Register() {
   const router = useRouter();
@@ -13,22 +15,32 @@ export default function Register() {
     password:"",
   confirmPassword:""});
 
+  const [errors , setErrors] = useState({});
+
     const handleChange=(e)=>{
       setFormData((prev)=>({...prev , [e.target.name]:e.target.value}));
 }
     const handleSubmit = async (e) => {
   e.preventDefault();
-  if ( !formData.name || !formData.email || !formData.phoneNumber || !formData.password || !formData.confirmPassword) {
-      alert("Please fill in all fields");
-      return;
-    }
+  setErrors({});
 
-  if (formData.password !== formData.confirmPassword) {
-    alert("Passwords do not match");
-    return;
-  }
+  
+
  
   try {
+    const validation = registerSchema.safeParse(formData);
+
+    if(!validation.success){
+      const newErrors={};
+      validation.error.issues.forEach((issue)=>{
+        const field = issue.path[0];
+        if(!newErrors[field]){
+          newErrors[field]=issue.message;
+        }
+      })
+      setErrors(newErrors);
+      return;
+    }
     const response =await register({
       name: formData.name,
       email: formData.email,
@@ -77,6 +89,10 @@ export default function Register() {
               onChange={handleChange}
             />
           </div>
+          {errors.name && (
+    <p className="text-red-500 text-sm mt-1">
+        {errors.name}
+    </p>)}
 
           {/* Email */}
           <div>
@@ -92,6 +108,11 @@ export default function Register() {
             />
           </div>
 
+          {errors.email && (
+    <p className="text-red-500 text-sm mt-1">
+        {errors.email}
+    </p>)}
+
           {/* Phone Number */}
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-700">
@@ -105,6 +126,10 @@ export default function Register() {
                name="phoneNumber" value={formData.phoneNumber} onChange={handleChange}
             />
           </div>
+          {errors.phoneNumber && (
+    <p className="text-red-500 text-sm mt-1">
+        {errors.phoneNumber}
+    </p>)}
 
           {/* Password */}
           <div>
@@ -119,6 +144,10 @@ export default function Register() {
               name="password" value={formData.password} onChange={handleChange}
             />
           </div>
+          {errors.password && (
+    <p className="text-red-500 text-sm mt-1">
+        {errors.password}
+    </p>)}
 
           {/* Confirm Password */}
           <div>
@@ -133,6 +162,10 @@ export default function Register() {
               name="confirmPassword" value={formData.confirmPassword} onChange={handleChange}
             />
           </div>
+             {errors.confirmPassword && (
+    <p className="text-red-500 text-sm mt-1">
+        {errors.confirmPassword}
+    </p>)}
 
           {/* Register Button */}
           <button
@@ -145,12 +178,12 @@ export default function Register() {
           {/* Login Link */}
           <p className="text-center text-sm text-gray-600">
             Already have an account?{" "}
-            <a
+            <Link
               href="/login"
               className="text-blue-600 font-semibold hover:underline"
             >
               Login
-            </a>
+            </Link>
           </p>
 
         </form>

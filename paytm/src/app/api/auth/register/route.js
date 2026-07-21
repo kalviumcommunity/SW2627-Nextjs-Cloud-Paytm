@@ -2,7 +2,7 @@ import prisma from"@/lib/prisma.js";
 import {generateToken} from "@/lib/jwt.js";
 import {cookies} from "next/headers";
 import bcrypt from "bcryptjs";
-import { registerSchema } from "@/validations/authValidation";
+import { registerApiSchema } from "@/validations/authValidation";
 
 
 
@@ -10,7 +10,7 @@ export async function POST(req) {
     try{
     const cookieStore = await cookies();
     const body = await req.json();
-    const validation = registerSchema.safeParse(body);
+    const validation = registerApiSchema.safeParse(body);
 
     if(!validation.success){
         return Response.json({

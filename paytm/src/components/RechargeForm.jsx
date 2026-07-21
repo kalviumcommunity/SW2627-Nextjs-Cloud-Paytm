@@ -35,7 +35,11 @@ export default function RechargeForm({onSuccess}) {
         
         const newErrors={};
         validation.error.issues.forEach((issue)=>{
-          newErrors[issue.path[0]]= issue.message;
+           const field = issue.path[0];
+
+    if (!newErrors[field]) {
+        newErrors[field] = issue.message;
+    }
         })
         setErrors(newErrors);
         return;
@@ -128,7 +132,7 @@ if(!response.success){
 
             <input
               type="number"
-              min="1"
+              
               placeholder="Enter amount"
               className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                name="amount" value={formData.amount} onChange={handleChange}

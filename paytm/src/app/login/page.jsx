@@ -3,6 +3,8 @@ import {useState} from "react";
 import {login} from "@/services/auth";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { loginSchema } from "@/validations/authValidation";
+
 
 
 export default function Login() {
@@ -13,6 +15,7 @@ export default function Login() {
     password:""
   });
   const [loading, setLoading] = useState(false);
+  const [errors , setErrors]=useState({});
 
   function handleChange(e){
     setFormData((prev)=>({...prev , [e.target.name]:e.target.value}))
@@ -21,11 +24,26 @@ export default function Login() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setErrors({});
 
     setLoading(true);
 
     try {
-        const response = await login(formData);
+      const validation = loginSchema.safeParse(formData);
+
+      if(!validation.success){
+        const newErrors={};
+        validation.error.issues.forEach((issue)=>{
+          const field = issue.path[0]
+          if(!newErrors[field]){
+            newErrors[field]=issue.message
+          }
+
+        })
+        setErrors(newErrors);
+        return;
+      }
+        const response = await login(validation.data);
 
         if (response.data.success) {
             alert("Logged in successfully");
@@ -67,6 +85,7 @@ export default function Login() {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Email Address
             </label>
+           
 
             <input
               type="email"
@@ -77,6 +96,10 @@ export default function Login() {
               onChange={handleChange}
 
             />
+              {errors.email && (
+    <p className="text-red-500 text-sm mt-1">
+        {errors.email}
+    </p>)}
           </div>
 
           {/* Password */}
@@ -94,6 +117,10 @@ export default function Login() {
               onChange={handleChange}
             />
           </div>
+            {errors.password && (
+    <p className="text-red-500 text-sm mt-1">
+        {errors.password}
+    </p>)}
 
           {/* Login Button */}
           <button
