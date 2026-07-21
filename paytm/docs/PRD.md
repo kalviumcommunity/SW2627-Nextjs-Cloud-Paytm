@@ -1,416 +1,418 @@
-Product Requirements Document (PRD)
-Project: Paytm Recharge History with Live Transaction Status Polling
+# Product Requirements Document (PRD)
 
-Version: 1.0
-Prepared By: sq135-Nilgiri
-Product: Recharge History System
-Platform: Web Application (Next.js + Backend API)
-Priority: High
+# Recharge System
 
-1. Executive Summary
+**Version:** 1.0
 
-Paytm wants to improve the recharge experience by providing users with a live-updating recharge history where transaction status changes (Pending → Success/Failed) appear automatically without requiring a page refresh.
+**Project Type:** Full Stack Web Application
 
-The system should also allow users to:
+**Frontend:** Next.js + React + Tailwind CSS
 
-View recharge history
-Filter transactions by operator and date
-Prevent duplicate recharge attempts within 10 seconds
-Display real-time transaction status using polling
+**Backend:** Next.js API Routes
 
-This feature aims to make recharge tracking faster, more transparent, and prevent accidental duplicate payments.
+**Database:** PostgreSQL
 
-2. Business Problem Statement
-Current Problems
+**ORM:** Prisma
 
-Users currently face several issues after making a recharge:
+**Authentication:** JWT + HTTP Only Cookies
 
-Recharge status remains outdated until the page is refreshed.
-Users are unsure whether a recharge is still processing.
-Duplicate recharge attempts are made because users think the first recharge failed.
-Searching old transactions is difficult without filters.
+---
 
-These issues increase customer support requests and can lead to financial losses due to duplicate recharges.
+# 1. Introduction
 
-Business Goal
+Recharge System is a secure web application that allows users to perform prepaid mobile recharges through a modern and responsive interface.
 
-Develop a recharge history system that:
+The application focuses on providing a seamless recharge experience while ensuring secure authentication, transaction tracking, duplicate recharge prevention, and real-time transaction status updates.
 
-Updates transaction status automatically
-Prevents duplicate recharge submissions
-Allows easy filtering of recharge history
-Improves customer confidence and experience
-3. Stakeholders
-Stakeholder	Responsibility
-End Users	Perform recharges and monitor status
-Product Manager	Defines requirements
-Frontend Developers	Build Recharge History UI
-Backend Developers	APIs, polling logic, duplicate prevention
-QA Team	Testing
-DevOps	Deployment
-Customer Support	Handle recharge complaints
-4. User Personas
-Persona 1 – Daily User
-Performs mobile recharge frequently
-Wants instant confirmation
-Doesn't like refreshing pages repeatedly
-Persona 2 – Business User
-Makes multiple DTH/Fastag recharges
-Needs transaction history
-Wants filters for previous recharges
-5. Problem Statement
+Unlike traditional recharge applications, this system continuously monitors recharge status without requiring the user to manually refresh the page.
 
-Users need a reliable recharge history system that:
+---
 
-Shows live status updates
-Prevents accidental duplicate recharges
-Allows quick search of previous transactions
+# 2. Problem Statement
 
-without manually refreshing the page.
+Many recharge platforms suffer from common issues such as:
 
-6. Success Metrics (KPIs)
-KPI	Target
-Duplicate recharge rate	<1%
-Transaction status update delay	≤5 seconds
-History page load time	<2 seconds
-API success rate	>99%
-Polling success rate	>98%
-User satisfaction	>90%
-7. Functional Requirements
-FR-1 Recharge Creation
+- Duplicate recharge requests caused by repeated clicks
+- Lack of live transaction updates
+- Poor transaction history management
+- Complex user interfaces
+- Limited visibility into recharge status
 
-User initiates recharge.
+Recharge System addresses these challenges by providing a secure, efficient, and user-friendly recharge platform.
 
-System creates transaction with
+---
 
-Status = Pending
+# 3. Objectives
 
-A unique Transaction ID is generated.
+The primary objectives are:
 
-FR-2 Recharge History
+- Provide secure user authentication
+- Simplify the recharge process
+- Prevent duplicate recharge requests
+- Display live transaction updates
+- Store complete recharge history
+- Build a scalable application using modern technologies
 
-Display
+---
 
-Mobile Number
-Operator
-Amount
-Date & Time
-Status
-Transaction ID
+# 4. Target Users
 
-Sorted by latest first.
+The application is intended for:
 
-FR-3 Live Status Polling
+- Students
+- Individual mobile users
+- Users performing frequent prepaid recharges
+- Users seeking a simple and secure recharge experience
 
-Instead of refreshing the page,
+---
 
-Frontend polls backend every
+# 5. User Roles
 
-5 seconds
+## Registered User
 
-Backend returns latest status.
+A registered user can:
 
-If status changes
+- Create an account
+- Login securely
+- Logout
+- Recharge mobile numbers
+- View recharge history
+- Filter transactions
+- Track live recharge status
+- View personal dashboard
 
-Pending
-↓
+---
 
-Success
+# 6. Features
 
-or
+## Authentication Module
 
-Pending
-↓
+### Registration
 
-Failed
+Users can create an account using:
 
-UI updates automatically.
+- Full Name
+- Email
+- Phone Number
+- Password
 
-FR-4 Duplicate Recharge Prevention
+Validation includes:
 
-If same user attempts
+- Unique email
+- Valid phone number
+- Strong password
 
-Same Mobile Number
+---
 
-Same Operator
+### Login
 
-Same Amount
+Registered users can login using:
 
-within
+- Email
+- Password
 
-10 seconds
+System will:
 
-Backend rejects request.
+- Verify credentials
+- Generate JWT
+- Store authentication in HTTP Only Cookie
+- Redirect to Dashboard
 
-Error:
+---
 
-Duplicate recharge detected.
-Please wait 10 seconds.
-FR-5 Filter by Date
+### Logout
 
-User can filter by
+Users can securely logout.
 
-Today
-Last 7 Days
-Last 30 Days
-Custom Date Range
-FR-6 Filter by Operator
+The system clears authentication cookies and redirects the user to the Login page.
 
-Supported operators:
+---
 
-Airtel
-Jio
-Vi
-BSNL
-DTH Operators
-Fastag Operators
-FR-7 Loading State
+# 7. Dashboard
 
-While fetching
+After successful login, users are redirected to the Dashboard.
 
-Show loading spinner
+Dashboard displays:
 
-Loading recharge history...
-FR-8 Empty State
+- Welcome message
+- Recharge button
+- Recent transactions
+- Quick statistics
 
-If no transactions exist
+---
 
-Display
+# 8. Recharge Module
 
-No recharge history found.
-FR-9 Error State
+The recharge form contains:
 
-If API fails
+- Mobile Number
+- Operator
+- Recharge Amount
 
-Display
+Validation:
 
-Unable to fetch recharge history.
-Retry.
-8. User Stories
-US-01
+- Mobile number must contain 10 digits
+- Amount must be greater than zero
+- All fields are mandatory
 
-As a user,
+After successful validation:
 
-I want to see my recharge history,
+- Transaction ID is generated
+- Recharge request is stored
+- Initial status becomes Pending
 
-so that I can track previous transactions.
+---
 
-US-02
+# 9. Live Transaction Status
 
-As a user,
+After recharge submission:
 
-I want recharge status to update automatically,
+The frontend automatically polls the server every few seconds.
 
-so that I don't need to refresh the page.
+Possible statuses:
 
-US-03
+- Pending
+- Success
+- Failed
 
-As a user,
+The status is updated automatically without refreshing the page.
 
-I want to filter history by operator,
+Polling stops immediately after the recharge reaches its final state.
 
-so that I can quickly find transactions.
+---
 
-US-04
+# 10. Duplicate Recharge Prevention
 
-As a user,
+To prevent accidental multiple payments:
 
-I want to filter by date,
+The system blocks recharge requests if:
 
-so that I can view transactions from a specific period.
+- Mobile Number is same
+- Operator is same
+- Amount is same
+- Request occurs within 10 seconds
 
-US-05
+This prevents duplicate transactions caused by multiple button clicks.
 
-As a user,
+---
 
-I want duplicate recharges to be blocked,
+# 11. Recharge History
 
-so that I don't accidentally pay twice.
+Users can access their recharge history.
 
-9. Acceptance Criteria
-Recharge History
-Latest transaction appears first
-Status displayed correctly
-Transaction ID visible
-Polling
-Poll every 5 seconds
-No manual refresh needed
-UI updates instantly after status change
-Duplicate Prevention
+Each transaction displays:
 
-Given
+- Transaction ID
+- Mobile Number
+- Operator
+- Amount
+- Date & Time
+- Recharge Status
 
-Recharge already submitted
+History supports:
 
-When
+- Date Filter
+- Operator Filter
 
-User retries within 10 seconds
+---
 
-Then
+# 12. Security
 
-API returns
+Security features include:
 
-409 Conflict
+- JWT Authentication
+- HTTP Only Cookies
+- Protected Routes
+- Password Hashing
+- Input Validation
+- Secure API Access
 
-Message
+Only authenticated users can access recharge functionality.
 
-Duplicate recharge detected.
-Filters
+---
 
-User selects
+# 13. Database
 
-Date + Operator
+The application stores:
 
-History updates correctly.
+## User
 
-10. Non-Functional Requirements
-Requirement	Target
-API Response	<500 ms
-Polling Interval	5 sec
-Concurrent Users	10,000+
-Uptime	99.9%
-Mobile Responsive	Yes
-Browser Support	Chrome, Edge, Firefox
-11. Data Model
-Recharge Transaction
-Field	Type
-id	UUID
-userId	UUID
-mobileNumber	String
-operator	String
-amount	Number
-status	Pending/Success/Failed
-transactionId	String
-createdAt	Timestamp
-updatedAt	Timestamp
-12. API Requirements
-POST /api/recharge
+- User ID
+- Name
+- Email
+- Phone Number
+- Password Hash
+- Created At
 
-Create recharge
+---
 
-Response
+## Recharge
 
-{
-  "transactionId": "TXN12345",
-  "status": "Pending"
-}
-GET /api/recharge-history
+- Recharge ID
+- User ID
+- Mobile Number
+- Operator
+- Amount
+- Status
+- Transaction ID
+- Created At
+- Updated At
 
-Returns recharge list.
+---
 
-Supports
+# 14. Functional Requirements
 
-?page=1
+## Authentication
 
-&operator=Airtel
+✔ User Registration
 
-&from=2026-07-01
+✔ Login
 
-&to=2026-07-10
-GET /api/status/:transactionId
+✔ Logout
 
-Returns
+✔ JWT Authentication
 
-{
-    "status":"Success"
-}
+✔ Protected Dashboard
 
-Used for polling.
+---
 
-13. Data Flow
-User
+## Recharge
 
-↓
+✔ Create Recharge
 
-Clicks Recharge
+✔ Recharge Validation
 
-↓
+✔ Transaction Generation
 
-Backend Creates Transaction
+✔ Duplicate Recharge Prevention
 
-↓
+✔ Live Status Polling
 
-Status = Pending
+---
 
-↓
+## History
 
-Saved in Database
+✔ Transaction History
 
-↓
+✔ Filter
 
-Recharge History Loads
 
-↓
+---
 
-Frontend starts Polling (5 sec)
 
-↓
 
-Backend checks Payment Gateway
+# 15. User Flow
 
-↓
+```
+                    START
+                      │
+                      ▼
+               Landing Page
+                      │
+          ┌───────────┴───────────┐
+          ▼                       ▼
+      Register                 Login
+          │                       │
+          └───────────┬───────────┘
+                      ▼
+              Authentication
+                      │
+          JWT + HTTP Only Cookie
+                      │
+                      ▼
+                 Dashboard
+                      │
+          ┌───────────┴───────────┐
+          ▼                       ▼
+   View History            Recharge Mobile
+                                  │
+                                  ▼
+                     Fill Recharge Details
+                                  │
+                                  ▼
+                         Submit Recharge
+                                  │
+                                  ▼
+                    Create Transaction Record
+                                  │
+                                  ▼
+                         Status = Pending
+                                  │
+                                  ▼
+                    Background Status Polling
+                                  │
+                 ┌────────────────┴──────────────┐
+                 ▼                               ▼
+             Processing                      Failed
+                 │
+                 ▼
+             Success
+                 │
+                 ▼
+      Update Recharge History Automatically
+                 │
+                 ▼
+              Dashboard Updated
+                 │
+                 ▼
+               Logout
+                 │
+                 ▼
+                 END
+```
 
-Status Updated
+---
 
-↓
+# 16. Future Enhancements
 
-Frontend receives latest status
+Future versions may include:
 
-↓
+- DTH Recharge
+- Electricity Bill Payments
+- Gas Bill Payments
+- Water Bill Payments
+- UPI Integration
+- Wallet System
+- Razorpay Integration
+- Email Notifications
+- SMS Notifications
+- Admin Dashboard
+- Analytics Dashboard
+- Monthly Reports
+- Dark Mode
+- Multi-language Support
 
-UI updates automatically
-14. Out of Scope (Version 1)
-Push notifications
-SMS alerts
-Email receipts
-WebSocket implementation
-Recharge cancellation
-Refund management
-Download PDF invoice
-15. Risks & Mitigation
-Risk	Impact	Mitigation
-Too many polling requests	High server load	Poll every 5 seconds and stop polling once a final status is reached
-Duplicate recharge bypass	Financial loss	Validate user ID, mobile number, operator, amount, and 10-second window on the backend
-Slow payment gateway response	Pending status persists	Display a "Processing" state and continue polling until timeout or completion
-Database performance	Slow history loading	Add indexes on userId, createdAt, and operator; paginate history results
-16. Assumptions
-Users are authenticated before making a recharge.
-Payment gateway provides transaction status updates.
-Recharge history is stored in a relational database.
-Backend maintains transaction timestamps accurately.
-Polling stops automatically once the status becomes Success or Failed.
-17. Future Enhancements (Version 2)
-Real-time updates using WebSockets instead of polling.
-Search by mobile number or transaction ID.
-Export recharge history (CSV/PDF).
-Favorite recharge operators.
-Auto-recharge scheduling.
-Refund tracking.
-Push notifications for recharge completion.
-18. Technical Architecture 
-                 User
-                   │
-                   ▼
-          Next.js Frontend
-                   │
-      ┌────────────┴────────────┐
-      │                         │
-      ▼                         ▼
- Recharge API            History API
-      │                         │
-      └────────────┬────────────┘
-                   ▼
-            Backend Server
-                   │
-      ┌────────────┴────────────┐
-      ▼                         ▼
- Transaction Database    Payment Gateway
-                   │
-                   ▼
-           Status Polling Service
-                   │
-                   ▼
-          Updated Transaction Status
-                   │
-                   ▼
-          Frontend UI Auto-Refresh
+---
+
+# 17. Success Criteria
+
+The project is considered successful if:
+
+- Users can register and login securely.
+- Recharge requests are processed correctly.
+- Duplicate recharges are prevented.
+- Live transaction status updates without page refresh.
+- Recharge history is stored accurately.
+- Users can search and filter transactions.
+- Secure authentication is maintained throughout the application.
+
+---
+
+# 18. Technology Stack
+
+| Layer | Technology |
+|---------|------------|
+| Frontend | Next.js, React |
+| Styling | Tailwind CSS |
+| Backend | Next.js API Routes |
+| Database | PostgreSQL |
+| ORM | Prisma |
+| Authentication | JWT |
+| Cookies | HTTP Only Cookies |
+| Version Control | Git & GitHub |
+
+---
+
+# 19. Conclusion
+
+Recharge System is a modern full-stack web application designed to deliver a secure, reliable, and user-friendly mobile recharge experience. By integrating JWT authentication, PostgreSQL with Prisma, duplicate recharge prevention, real-time transaction polling, and comprehensive recharge history management, the platform ensures both functionality and scalability. The modular architecture also makes it easy to extend the application with additional payment services and administrative features in future releases.
