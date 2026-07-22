@@ -5,16 +5,35 @@ import StatusBadge from "./StatusBadge";
 
 export default function RechargeHistory({filters , refreshKey}) {
     const [recharges , setRecharge] = useState([]);
+    
     const fetchHistory = async()=>{
         try{
             const response  = await getRecharges(filters);
+    
             setRecharge(response.data.recharges)
+
+            
+
 
         }catch(err){
             console.log(err);
 
         }
     }
+
+    const totalRecharges = recharges.length;
+
+    const successfulRecharges = recharges.filter(
+        (recharge) => recharge.status === "SUCCESS"
+    ).length;
+
+    const pendingRecharges = recharges.filter(
+        (recharge) => recharge.status === "PENDING"
+    ).length;
+
+    const failedRecharges = recharges.filter(
+        (recharge) => recharge.status === "FAILED"
+    ).length;
     useEffect(() => {
         const interval = setInterval(() => {
              fetchHistory();
@@ -31,6 +50,46 @@ export default function RechargeHistory({filters , refreshKey}) {
             <h2 className="text-2xl font-bold mb-4">
               Recharge History
             </h2>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+
+    <div className="bg-blue-50 p-4 rounded-lg">
+        <p className="text-sm text-gray-500">
+            Total Recharges
+        </p>
+        <p className="text-2xl font-bold text-blue-600">
+            {totalRecharges}
+        </p>
+    </div>
+
+    <div className="bg-green-50 p-4 rounded-lg">
+        <p className="text-sm text-gray-500">
+            Successful
+        </p>
+        <p className="text-2xl font-bold text-green-600">
+            {successfulRecharges}
+        </p>
+    </div>
+
+    <div className="bg-yellow-50 p-4 rounded-lg">
+        <p className="text-sm text-gray-500">
+            Pending
+        </p>
+        <p className="text-2xl font-bold text-yellow-600">
+            {pendingRecharges}
+        </p>
+    </div>
+
+    <div className="bg-red-50 p-4 rounded-lg">
+        <p className="text-sm text-gray-500">
+            Failed
+        </p>
+        <p className="text-2xl font-bold text-red-600">
+            {failedRecharges}
+        </p>
+    </div>
+
+</div>
 
              <div className="overflow-x-auto">
 
@@ -58,6 +117,7 @@ export default function RechargeHistory({filters , refreshKey}) {
                     key={recharge.id}
                     className="border-t hover:bg-gray-50"
                 >
+                    
                     <td className="px-4 py-3">
                         {recharge.transactionId}
                     </td>
