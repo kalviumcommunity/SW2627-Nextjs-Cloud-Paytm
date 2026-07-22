@@ -101,11 +101,13 @@ export default function RechargeHistory({filters , refreshKey}) {
     <table className="min-w-full border border-gray-200 rounded-lg">
         <thead className="bg-gray-100">
             <tr>
+                <th className="px-4 py-3 text-left">Transaction ID</th>
                 <th className="px-4 py-3 text-left">Mobile</th>
                 <th className="px-4 py-3 text-left">Operator</th>
                 <th className="px-4 py-3 text-left">Amount</th>
                 <th className="px-4 py-3 text-left">Status</th>
                 <th className="px-4 py-3 text-left">Date</th>
+                <th className="px-4 py-3 text-left">Time</th>
             </tr>
         </thead>
 
@@ -116,6 +118,9 @@ export default function RechargeHistory({filters , refreshKey}) {
                     className="border-t hover:bg-gray-50"
                 >
                     
+                    <td className="px-4 py-3">
+                        {recharge.transactionId}
+                    </td>
                     <td className="px-4 py-3">
                         {recharge.mobileNumber}
                     </td>
@@ -136,6 +141,13 @@ export default function RechargeHistory({filters , refreshKey}) {
                         {new Date(
                             recharge.createdAt
                         ).toLocaleDateString()}
+                    </td>
+                    <td className="px-4 py-3">
+                     {new Date(recharge.createdAt).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      second: "2-digit",
+                      hour12: true, })}
                     </td>
                 </tr>
             ))}
