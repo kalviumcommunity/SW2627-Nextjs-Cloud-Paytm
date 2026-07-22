@@ -70,7 +70,7 @@ if (existingUser) {
     });
 
     // Generate a token for the new user
-    const token = generateToken({ id: user.id, email: user.email });
+    const token = generateToken({  name: existingUser.name,id: user.id, email: user.email });
 
     // Set the token as a cookie
     cookieStore.set("token", token, {

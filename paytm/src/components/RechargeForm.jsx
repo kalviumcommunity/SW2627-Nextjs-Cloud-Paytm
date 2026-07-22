@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { createRecharge } from "@/services/recharge";
 import { rechargeSchema } from "@/validations/rechargeValidation";
+import toast from "react-hot-toast";
 
 export default function RechargeForm({onSuccess}) {
    const [formData , setFormData] = useState({
@@ -49,9 +50,10 @@ export default function RechargeForm({onSuccess}) {
             operator,
             amount: Number(amount),
         });
-        alert("Recharge successful")
+       
 
-        if (response.success) {
+        if (response.data.success) {
+           toast.success("Recharge request submitted successfully")
     setFormData({
         mobileNumber: "",
         operator: "",
@@ -59,20 +61,26 @@ export default function RechargeForm({onSuccess}) {
     }) 
     onSuccess();
 }
-if(!response.success){
-    return;
+}catch(error){
+  toast.error(
+  error.response?.data?.message || "Something went wrong"
+);
 
 }
 
-        console.log(response);
+        
 
-    } finally {
+     finally {
         setLoading(false);
     }
 };
 
     return (
         <div>
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-6">
+  <h2 className="text-xl font-semibold text-gray-800 mb-6">
+    Make a Recharge
+  </h2>
           <form className="space-y-5" onSubmit={handleSubmit}>
 
           <div>
@@ -155,6 +163,7 @@ if(!response.success){
           </button>
 
         </form>
+        </div>
         </div>
     );
 }
