@@ -48,6 +48,7 @@ export default function RechargeHistory({filters , refreshKey}) {
                 <th className="px-4 py-3 text-left">Amount</th>
                 <th className="px-4 py-3 text-left">Status</th>
                 <th className="px-4 py-3 text-left">Date</th>
+                <th className="px-4 py-3 text-left">Time</th>
             </tr>
         </thead>
 
@@ -80,6 +81,13 @@ export default function RechargeHistory({filters , refreshKey}) {
                         {new Date(
                             recharge.createdAt
                         ).toLocaleDateString()}
+                    </td>
+                    <td className="px-4 py-3">
+                     {new Date(recharge.createdAt).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      second: "2-digit",
+                      hour12: true, })}
                     </td>
                 </tr>
             ))}
