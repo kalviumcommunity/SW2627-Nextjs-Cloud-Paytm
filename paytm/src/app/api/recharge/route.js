@@ -205,6 +205,15 @@ const total = await prisma.recharge.count({
     where,
 });
 
+
+const hasPending = await prisma.recharge.count({
+    where: {
+        userId: user.id,
+        status: "PENDING",
+    },
+}) > 0;
+
+
 const totalPages = Math.ceil(total / limit);
 
 return Response.json(
@@ -216,7 +225,7 @@ return Response.json(
         limit,
         total,
         totalPages,
-    }},
+    } , hasPending},
     {
         status: 200,
     }
