@@ -8,6 +8,11 @@ export default function RechargeHistory({ filters, refreshKey }) {
     const [recharges, setRecharge] = useState([]);
     const [page, setPage] = useState(1);
     const [pagination, setPagination] = useState({});
+    const [statistics, setStatistics] = useState({
+    successful: 0,
+    pending: 0,
+    failed: 0,
+});
 
     const fetchHistory = async () => {
         try {
@@ -15,24 +20,13 @@ export default function RechargeHistory({ filters, refreshKey }) {
 
             setRecharge(response.data.recharges);
             setPagination(response.data.pagination);
+             setStatistics(response.data.statistics);
         } catch (err) {
             console.log(err);
         }
     };
 
-    const totalRecharges = pagination.total || 0;
 
-    const successfulRecharges = recharges.filter(
-        (recharge) => recharge.status === "SUCCESS"
-    ).length;
-
-    const pendingRecharges = recharges.filter(
-        (recharge) => recharge.status === "PENDING"
-    ).length;
-
-    const failedRecharges = recharges.filter(
-        (recharge) => recharge.status === "FAILED"
-    ).length;
 
     useEffect(() => {
         setPage(1);
@@ -71,7 +65,7 @@ export default function RechargeHistory({ filters, refreshKey }) {
                     </p>
 
                     <p className="mt-1 text-xl font-bold text-blue-600 sm:text-2xl">
-                        {totalRecharges}
+                        {statistics.total}
                     </p>
                 </div>
 
@@ -81,7 +75,7 @@ export default function RechargeHistory({ filters, refreshKey }) {
                     </p>
 
                     <p className="mt-1 text-xl font-bold text-green-600 sm:text-2xl">
-                        {successfulRecharges}
+                        {statistics.successful}
                     </p>
                 </div>
 
@@ -91,7 +85,7 @@ export default function RechargeHistory({ filters, refreshKey }) {
                     </p>
 
                     <p className="mt-1 text-xl font-bold text-yellow-600 sm:text-2xl">
-                        {pendingRecharges}
+                        {statistics.pending}
                     </p>
                 </div>
 
@@ -101,7 +95,7 @@ export default function RechargeHistory({ filters, refreshKey }) {
                     </p>
 
                     <p className="mt-1 text-xl font-bold text-red-600 sm:text-2xl">
-                        {failedRecharges}
+                        {statistics.failed}
                     </p>
                 </div>
 
