@@ -1,27 +1,26 @@
 "use client";
-import { useState , useEffect } from "react";
+
+import { useState, useEffect } from "react";
 import { getRecharges } from "@/services/recharge";
 import StatusBadge from "./StatusBadge";
 
-export default function RechargeHistory({filters , refreshKey}) {
-    const [recharges , setRecharge] = useState([]);
-    
-    const fetchHistory = async()=>{
-        try{
-            const response  = await getRecharges(filters);
-    
-            setRecharge(response.data.recharges)
+export default function RechargeHistory({ filters, refreshKey }) {
+    const [recharges, setRecharge] = useState([]);
+    const [page, setPage] = useState(1);
+    const [pagination, setPagination] = useState({});
 
-            
+    const fetchHistory = async () => {
+        try {
+            const response = await getRecharges(filters, page);
 
-
-        }catch(err){
+            setRecharge(response.data.recharges);
+            setPagination(response.data.pagination);
+        } catch (err) {
             console.log(err);
-
         }
-    }
+    };
 
-    const totalRecharges = recharges.length;
+    const totalRecharges = pagination.total || 0;
 
     const successfulRecharges = recharges.filter(
         (recharge) => recharge.status === "SUCCESS"
@@ -34,128 +33,203 @@ export default function RechargeHistory({filters , refreshKey}) {
     const failedRecharges = recharges.filter(
         (recharge) => recharge.status === "FAILED"
     ).length;
-    useEffect(() => {
-        const interval = setInterval(() => {
-             fetchHistory();
 
-            
+    useEffect(() => {
+        setPage(1);
+    }, [filters]);
+
+    useEffect(() => {
+        fetchHistory();
+
+        const interval = setInterval(() => {
+            fetchHistory();
         }, 5000);
 
-        return ()=>clearInterval(interval)
-   
-}, [filters , refreshKey]);
+        return () => clearInterval(interval);
+    }, [filters, refreshKey, page]);
 
     return (
-        <div className="mt-10 bg-white p-5 rounded shadow">
-            <h2 className="text-2xl font-bold mb-4">
-              Recharge History
-            </h2>
+        <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            {/* Header */}
+            <div className="mb-6">
+                <h2 className="text-xl font-bold text-slate-900 sm:text-2xl">
+                    Recharge History
+                </h2>
 
-    <div className="bg-blue-50 p-4 rounded-lg">
-        <p className="text-sm text-gray-500">
-            Total Recharges
-        </p>
-        <p className="text-2xl font-bold text-blue-600">
-            {totalRecharges}
-        </p>
-    </div>
+                <p className="mt-1 text-sm text-slate-500">
+                    View and track your recent recharge transactions.
+                </p>
+            </div>
 
-    <div className="bg-green-50 p-4 rounded-lg">
-        <p className="text-sm text-gray-500">
-            Successful
-        </p>
-        <p className="text-2xl font-bold text-green-600">
-            {successfulRecharges}
-        </p>
-    </div>
+            {/* Statistics */}
+            <div className="mb-6 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
 
-    <div className="bg-yellow-50 p-4 rounded-lg">
-        <p className="text-sm text-gray-500">
-            Pending
-        </p>
-        <p className="text-2xl font-bold text-yellow-600">
-            {pendingRecharges}
-        </p>
-    </div>
+                <div className="rounded-xl border border-blue-100 bg-blue-50 p-4">
+                    <p className="text-xs font-medium text-slate-500 sm:text-sm">
+                        Total Recharges
+                    </p>
 
-    <div className="bg-red-50 p-4 rounded-lg">
-        <p className="text-sm text-gray-500">
-            Failed
-        </p>
-        <p className="text-2xl font-bold text-red-600">
-            {failedRecharges}
-        </p>
-    </div>
+                    <p className="mt-1 text-xl font-bold text-blue-600 sm:text-2xl">
+                        {totalRecharges}
+                    </p>
+                </div>
 
-</div>
+                <div className="rounded-xl border border-green-100 bg-green-50 p-4">
+                    <p className="text-xs font-medium text-slate-500 sm:text-sm">
+                        Successful
+                    </p>
 
-             <div className="overflow-x-auto">
+                    <p className="mt-1 text-xl font-bold text-green-600 sm:text-2xl">
+                        {successfulRecharges}
+                    </p>
+                </div>
 
-                {recharges.length === 0 ? (
-    <p className="text-center py-6 text-gray-500">
-        No recharge history found.
-    </p>
-) : (
-    <table className="min-w-full border border-gray-200 rounded-lg">
-        <thead className="bg-gray-100">
-            <tr>
-                <th className="px-4 py-3 text-left">Transaction ID</th>
-                <th className="px-4 py-3 text-left">Mobile</th>
-                <th className="px-4 py-3 text-left">Operator</th>
-                <th className="px-4 py-3 text-left">Amount</th>
-                <th className="px-4 py-3 text-left">Status</th>
-                <th className="px-4 py-3 text-left">Date</th>
-                <th className="px-4 py-3 text-left">Time</th>
-            </tr>
-        </thead>
+                <div className="rounded-xl border border-yellow-100 bg-yellow-50 p-4">
+                    <p className="text-xs font-medium text-slate-500 sm:text-sm">
+                        Pending
+                    </p>
 
-        <tbody>
-            {recharges.map((recharge) => (
-                <tr
-                    key={recharge.id}
-                    className="border-t hover:bg-gray-50"
-                >
-                    
-                    <td className="px-4 py-3">
-                        {recharge.transactionId}
-                    </td>
-                    <td className="px-4 py-3">
-                        {recharge.mobileNumber}
-                    </td>
+                    <p className="mt-1 text-xl font-bold text-yellow-600 sm:text-2xl">
+                        {pendingRecharges}
+                    </p>
+                </div>
 
-                    <td className="px-4 py-3">
-                        {recharge.operator}
-                    </td>
+                <div className="rounded-xl border border-red-100 bg-red-50 p-4">
+                    <p className="text-xs font-medium text-slate-500 sm:text-sm">
+                        Failed
+                    </p>
 
-                    <td className="px-4 py-3">
-                        ₹{recharge.amount}
-                    </td>
+                    <p className="mt-1 text-xl font-bold text-red-600 sm:text-2xl">
+                        {failedRecharges}
+                    </p>
+                </div>
 
-                    <td className="px-4 py-3">
-  <StatusBadge status={recharge.status} />
-</td>
+            </div>
 
-                    <td className="px-4 py-3">
-                        {new Date(
-                            recharge.createdAt
-                        ).toLocaleDateString()}
-                    </td>
-                    <td className="px-4 py-3">
-                     {new Date(recharge.createdAt).toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      second: "2-digit",
-                      hour12: true, })}
-                    </td>
-                </tr>
-            ))}
-        </tbody>
-    </table>
-)}
-    
-</div>
-        </div>
+            {/* Table */}
+            {recharges.length === 0 ? (
+                <div className="rounded-xl border border-dashed border-slate-300 py-10 text-center">
+                    <p className="font-medium text-slate-600">
+                        No recharge history found.
+                    </p>
+
+                    <p className="mt-1 text-sm text-slate-400">
+                        Try changing your filters or make your first recharge.
+                    </p>
+                </div>
+            ) : (
+                <div className="overflow-x-auto rounded-xl border border-slate-200">
+                    <table className="min-w-[850px] w-full">
+                        <thead className="bg-slate-50">
+                            <tr>
+                                <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                    Transaction ID
+                                </th>
+
+                                <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                    Mobile
+                                </th>
+
+                                <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                    Operator
+                                </th>
+
+                                <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                    Amount
+                                </th>
+
+                                <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                    Status
+                                </th>
+
+                                <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                    Date
+                                </th>
+
+                                <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                    Time
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {recharges.map((recharge) => {
+                                const date = new Date(recharge.createdAt);
+
+                                return (
+                                    <tr
+                                        key={recharge.id}
+                                        className="border-t border-slate-100 transition hover:bg-slate-50"
+                                    >
+                                        <td className="whitespace-nowrap px-4 py-4 text-sm font-medium text-slate-700">
+                                            {recharge.transactionId}
+                                        </td>
+
+                                        <td className="whitespace-nowrap px-4 py-4 text-sm text-slate-600">
+                                            {recharge.mobileNumber}
+                                        </td>
+
+                                        <td className="whitespace-nowrap px-4 py-4 text-sm text-slate-600">
+                                            {recharge.operator}
+                                        </td>
+
+                                        <td className="whitespace-nowrap px-4 py-4 text-sm font-medium text-slate-700">
+                                            ₹{recharge.amount}
+                                        </td>
+
+                                        <td className="whitespace-nowrap px-4 py-4">
+                                            <StatusBadge status={recharge.status} />
+                                        </td>
+
+                                        <td className="whitespace-nowrap px-4 py-4 text-sm text-slate-600">
+                                            {date.toLocaleDateString()}
+                                        </td>
+
+                                        <td className="whitespace-nowrap px-4 py-4 text-sm text-slate-600">
+                                            {date.toLocaleTimeString([], {
+                                                hour: "2-digit",
+                                                minute: "2-digit",
+                                                second: "2-digit",
+                                                hour12: true,
+                                            })}
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+
+            {/* Pagination */}
+            <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+
+                <p className="text-center text-sm text-slate-500 sm:text-left">
+                    Page {page} of {pagination.totalPages || 1}
+                </p>
+
+                <div className="flex justify-center gap-2 sm:justify-end">
+
+                    <button
+                        onClick={() => setPage((prev) => prev - 1)}
+                        disabled={page === 1}
+                        className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                        Previous
+                    </button>
+
+                    <button
+                        onClick={() => setPage((prev) => prev + 1)}
+                        disabled={page >= (pagination.totalPages ?? 1)}
+                        className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                        Next
+                    </button>
+
+                </div>
+            </div>
+
+        </section>
     );
 }
