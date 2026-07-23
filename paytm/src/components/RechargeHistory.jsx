@@ -20,8 +20,10 @@ export default function RechargeHistory({ filters, refreshKey }) {
         }
     };
 
+    // Total number of recharges across all pages
     const totalRecharges = pagination.total || 0;
 
+    // Statistics for the currently displayed page
     const successfulRecharges = recharges.filter(
         (recharge) => recharge.status === "SUCCESS"
     ).length;
@@ -34,10 +36,12 @@ export default function RechargeHistory({ filters, refreshKey }) {
         (recharge) => recharge.status === "FAILED"
     ).length;
 
+    // Reset to first page whenever filters change
     useEffect(() => {
         setPage(1);
     }, [filters]);
 
+    // Fetch history immediately and poll every 5 seconds
     useEffect(() => {
         fetchHistory();
 
@@ -65,6 +69,7 @@ export default function RechargeHistory({ filters, refreshKey }) {
             {/* Statistics */}
             <div className="mb-6 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
 
+                {/* Total */}
                 <div className="rounded-xl border border-blue-100 bg-blue-50 p-4">
                     <p className="text-xs font-medium text-slate-500 sm:text-sm">
                         Total Recharges
@@ -75,6 +80,7 @@ export default function RechargeHistory({ filters, refreshKey }) {
                     </p>
                 </div>
 
+                {/* Successful */}
                 <div className="rounded-xl border border-green-100 bg-green-50 p-4">
                     <p className="text-xs font-medium text-slate-500 sm:text-sm">
                         Successful
@@ -85,6 +91,7 @@ export default function RechargeHistory({ filters, refreshKey }) {
                     </p>
                 </div>
 
+                {/* Pending */}
                 <div className="rounded-xl border border-yellow-100 bg-yellow-50 p-4">
                     <p className="text-xs font-medium text-slate-500 sm:text-sm">
                         Pending
@@ -95,6 +102,7 @@ export default function RechargeHistory({ filters, refreshKey }) {
                     </p>
                 </div>
 
+                {/* Failed */}
                 <div className="rounded-xl border border-red-100 bg-red-50 p-4">
                     <p className="text-xs font-medium text-slate-500 sm:text-sm">
                         Failed
@@ -179,7 +187,9 @@ export default function RechargeHistory({ filters, refreshKey }) {
                                         </td>
 
                                         <td className="whitespace-nowrap px-4 py-4">
-                                            <StatusBadge status={recharge.status} />
+                                            <StatusBadge
+                                                status={recharge.status}
+                                            />
                                         </td>
 
                                         <td className="whitespace-nowrap px-4 py-4 text-sm text-slate-600">
@@ -221,7 +231,9 @@ export default function RechargeHistory({ filters, refreshKey }) {
 
                     <button
                         onClick={() => setPage((prev) => prev + 1)}
-                        disabled={page >= (pagination.totalPages ?? 1)}
+                        disabled={
+                            page >= (pagination.totalPages ?? 1)
+                        }
                         className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                         Next
