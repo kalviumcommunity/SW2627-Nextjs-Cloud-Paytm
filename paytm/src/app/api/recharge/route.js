@@ -206,6 +206,7 @@ const total = await prisma.recharge.count({
 });
 
 
+
 const hasPending = await prisma.recharge.count({
     where: {
         userId: user.id,
@@ -214,7 +215,43 @@ const hasPending = await prisma.recharge.count({
 }) > 0;
 
 
+
 const totalPages = Math.ceil(total / limit);
+
+const stats = await prisma.recharge.groupBy({
+  by: ["status"],
+  where: {
+    userId: user.id,
+  },
+  _count: {
+    _all: true,
+  },
+});
+
+const statistics = {
+  total: 0,
+  successful: 0,
+  pending: 0,
+  failed: 0,
+};
+
+stats.forEach((item) => {
+  const count = item._count._all;
+
+  statistics.total += count;
+
+  if (item.status === "SUCCESS") {
+    statistics.successful = count;
+  }
+
+  if (item.status === "PENDING") {
+    statistics.pending = count;
+  }
+
+  if (item.status === "FAILED") {
+    statistics.failed = count;
+  }
+});
 
 return Response.json(
     {
@@ -225,7 +262,9 @@ return Response.json(
         limit,
         total,
         totalPages,
-    } , hasPending},
+    } , statistics
+
+    , hasPending},
     {
         status: 200,
     }
