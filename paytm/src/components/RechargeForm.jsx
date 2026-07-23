@@ -28,7 +28,6 @@ export default function RechargeForm({ onSuccess }) {
 
     const { mobileNumber, operator, amount } = formData;
 
-    setLoading(true);
 
     try {
       const validation = rechargeSchema.safeParse(formData);
@@ -47,6 +46,7 @@ export default function RechargeForm({ onSuccess }) {
         setErrors(newErrors);
         return;
       }
+      setLoading(true);
 
       const response = await createRecharge({
         mobileNumber,

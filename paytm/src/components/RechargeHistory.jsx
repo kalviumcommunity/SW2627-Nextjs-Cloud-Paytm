@@ -8,17 +8,22 @@ export default function RechargeHistory({ filters, refreshKey }) {
     const [recharges, setRecharge] = useState([]);
     const [page, setPage] = useState(1);
     const [pagination, setPagination] = useState({});
+    const [hasPending, setHasPending] = useState(false);
 
     const fetchHistory = async () => {
-        try {
-            const response = await getRecharges(filters, page);
+    try {
+        const response = await getRecharges(filters, page);
 
-            setRecharge(response.data.recharges);
-            setPagination(response.data.pagination);
-        } catch (err) {
-            console.log(err);
-        }
-    };
+        const newRecharges = response.data.recharges;
+
+        setRecharge(newRecharges);
+        setPagination(response.data.pagination);
+        setHasPending(response.data.hasPending);
+
+    } catch (err) {
+        console.log(err);
+    }
+};
 
     // Total number of recharges across all pages
     const totalRecharges = pagination.total || 0;
@@ -42,16 +47,24 @@ export default function RechargeHistory({ filters, refreshKey }) {
     }, [filters]);
 
     // Fetch history immediately and poll every 5 seconds
-    useEffect(() => {
+   useEffect(() => {
+    fetchHistory();
+}, [filters, refreshKey, page]);
+
+
+
+     useEffect(() => {
+      if (!hasPending) {
+        return;
+    }
+
+    const interval = setInterval(() => {
         fetchHistory();
+        console.log("Polling for pending recharges...");
+    }, 5000);
 
-        const interval = setInterval(() => {
-            fetchHistory();
-        }, 5000);
-
-        return () => clearInterval(interval);
-    }, [filters, refreshKey, page]);
-
+    return () => clearInterval(interval);
+}, [hasPending, filters, page]);
     return (
         <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
 
