@@ -145,7 +145,11 @@ export async function GET(req){
   const { searchParams } = new URL(req.url);
   const operator = searchParams.get("operator");
   const date = searchParams.get("date");
-  
+  const page = Number(searchParams.get("page")) || 1;
+const limit = Number(searchParams.get("limit")) || 10;
+  const skip = (page-1)*limit;
+
+
 
      if (!user) {
       return Response.json(
@@ -193,13 +197,26 @@ const recharges = await prisma.recharge.findMany({
     orderBy: {
         createdAt: "desc",
     },
+    skip,
+    take:limit
 });
+
+const total = await prisma.recharge.count({
+    where,
+});
+
+const totalPages = Math.ceil(total / limit);
 
 return Response.json(
     {
         success: true,
         recharges,
-    },
+     pagination: {
+        page,
+        limit,
+        total,
+        totalPages,
+    }},
     {
         status: 200,
     }

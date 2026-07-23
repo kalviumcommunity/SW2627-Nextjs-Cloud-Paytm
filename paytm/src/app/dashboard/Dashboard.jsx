@@ -38,25 +38,35 @@ export default function Dashboard({ user }) {
     <div className="min-h-screen bg-gray-100">
       <Navbar />
 
-      <main className="max-w-6xl mx-auto px-6 py-8">
+      <main className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
 
+        {/* Welcome Section */}
         <WelcomeSection user={user} />
 
-        <RechargeForm
-          onSuccess={() => setRefreshKey((prev) => prev + 1)}
-        />
+        {/* Recharge Form */}
+        <section className="mt-6 sm:mt-8">
+          <RechargeForm
+            onSuccess={() => setRefreshKey((prev) => prev + 1)}
+          />
+        </section>
 
-        <FilterBar
-          filters={filters}
-          setFilters={setFilters}
-          onApply={handleApply}
-          onReset={handleReset}
-        />
+        {/* Filters */}
+        <section className="mt-6 sm:mt-8">
+          <FilterBar
+            filters={filters}
+            setFilters={setFilters}
+            onApply={handleApply}
+            onReset={handleReset}
+          />
+        </section>
 
-        <RechargeHistory
-          filters={appliedFilters}
-          refreshKey={refreshKey}
-        />
+        {/* Recharge History */}
+        <section className="mt-6 sm:mt-8">
+          <RechargeHistory
+            filters={appliedFilters}
+            refreshKey={refreshKey}
+          />
+        </section>
 
       </main>
     </div>
