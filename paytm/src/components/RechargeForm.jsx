@@ -28,7 +28,6 @@ export default function RechargeForm({ onSuccess }) {
 
     const { mobileNumber, operator, amount } = formData;
 
-    setLoading(true);
 
     try {
       const validation = rechargeSchema.safeParse(formData);
@@ -47,6 +46,7 @@ export default function RechargeForm({ onSuccess }) {
         setErrors(newErrors);
         return;
       }
+      setLoading(true);
 
       const response = await createRecharge({
         mobileNumber,
@@ -88,7 +88,7 @@ export default function RechargeForm({ onSuccess }) {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form className="space-y-5" onSubmit={handleSubmit}>
 
         {/* Form Fields */}
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">

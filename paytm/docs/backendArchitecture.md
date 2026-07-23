@@ -399,3 +399,38 @@ Dashboard Updates Automatically
 - POST /api/recharge/cancel
 - GET /api/dashboard/stats
 - GET /recharge/:id
+
++---------+
+|  Client |
++---------+
+     |
+     | HTTP Request
+     v
++------------------+
+| Next.js API Route|
++------------------+
+     |
+     | Validate Request
+     v
++------------------+
+| Authentication   |
+|  (JWT Cookie)    |
++------------------+
+     |
+     | Authorized
+     v
++------------------+
+| Business Logic   |
++------------------+
+     |
+     | Prisma ORM
+     v
++------------------+
+| PostgreSQL DB    |
++------------------+
+     |
+     | Response
+     v
++---------+
+| Client  |
++---------+

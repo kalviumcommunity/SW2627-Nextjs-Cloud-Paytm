@@ -8,40 +8,49 @@ export default function RechargeHistory({ filters, refreshKey }) {
     const [recharges, setRecharge] = useState([]);
     const [page, setPage] = useState(1);
     const [pagination, setPagination] = useState({});
-    const [statistics, setStatistics] = useState({
+   const [statistics, setStatistics] = useState({
     successful: 0,
     pending: 0,
     failed: 0,
 });
 
     const fetchHistory = async () => {
-        try {
-            const response = await getRecharges(filters, page);
+    try {
+        const response = await getRecharges(filters, page);
 
             setRecharge(response.data.recharges);
             setPagination(response.data.pagination);
-             setStatistics(response.data.statistics);
+            setStatistics(response.data.statistics);
         } catch (err) {
             console.log(err);
         }
     };
 
-
-
+    
+    // Reset to first page whenever filters change
     useEffect(() => {
         setPage(1);
     }, [filters]);
 
-    useEffect(() => {
+    // Fetch history immediately and poll every 5 seconds
+   useEffect(() => {
+    fetchHistory();
+}, [filters, refreshKey, page]);
+
+
+
+     useEffect(() => {
+      if (!hasPending) {
+        return;
+    }
+
+    const interval = setInterval(() => {
         fetchHistory();
+        console.log("Polling for pending recharges...");
+    }, 5000);
 
-        const interval = setInterval(() => {
-            fetchHistory();
-        }, 5000);
-
-        return () => clearInterval(interval);
-    }, [filters, refreshKey, page]);
-
+    return () => clearInterval(interval);
+}, [hasPending, filters, page]);
     return (
         <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
 
@@ -59,6 +68,7 @@ export default function RechargeHistory({ filters, refreshKey }) {
             {/* Statistics */}
             <div className="mb-6 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
 
+                {/* Total */}
                 <div className="rounded-xl border border-blue-100 bg-blue-50 p-4">
                     <p className="text-xs font-medium text-slate-500 sm:text-sm">
                         Total Recharges
@@ -69,6 +79,7 @@ export default function RechargeHistory({ filters, refreshKey }) {
                     </p>
                 </div>
 
+                {/* Successful */}
                 <div className="rounded-xl border border-green-100 bg-green-50 p-4">
                     <p className="text-xs font-medium text-slate-500 sm:text-sm">
                         Successful
@@ -79,6 +90,7 @@ export default function RechargeHistory({ filters, refreshKey }) {
                     </p>
                 </div>
 
+                {/* Pending */}
                 <div className="rounded-xl border border-yellow-100 bg-yellow-50 p-4">
                     <p className="text-xs font-medium text-slate-500 sm:text-sm">
                         Pending
@@ -89,6 +101,7 @@ export default function RechargeHistory({ filters, refreshKey }) {
                     </p>
                 </div>
 
+                {/* Failed */}
                 <div className="rounded-xl border border-red-100 bg-red-50 p-4">
                     <p className="text-xs font-medium text-slate-500 sm:text-sm">
                         Failed
@@ -173,7 +186,9 @@ export default function RechargeHistory({ filters, refreshKey }) {
                                         </td>
 
                                         <td className="whitespace-nowrap px-4 py-4">
-                                            <StatusBadge status={recharge.status} />
+                                            <StatusBadge
+                                                status={recharge.status}
+                                            />
                                         </td>
 
                                         <td className="whitespace-nowrap px-4 py-4 text-sm text-slate-600">
@@ -215,7 +230,9 @@ export default function RechargeHistory({ filters, refreshKey }) {
 
                     <button
                         onClick={() => setPage((prev) => prev + 1)}
-                        disabled={page >= (pagination.totalPages ?? 1)}
+                        disabled={
+                            page >= (pagination.totalPages ?? 1)
+                        }
                         className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                         Next

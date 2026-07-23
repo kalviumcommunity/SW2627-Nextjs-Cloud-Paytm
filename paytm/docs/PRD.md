@@ -416,3 +416,19 @@ The project is considered successful if:
 # 19. Conclusion
 
 Recharge System is a modern full-stack web application designed to deliver a secure, reliable, and user-friendly mobile recharge experience. By integrating JWT authentication, PostgreSQL with Prisma, duplicate recharge prevention, real-time transaction polling, and comprehensive recharge history management, the platform ensures both functionality and scalability. The modular architecture also makes it easy to extend the application with additional payment services and administrative features in future releases.
+
+
+
+## System Overview
+
+```mermaid
+flowchart LR
+    U[User] --> F[Recharge System]
+    F --> A[Authentication]
+    F --> R[Recharge Service]
+    F --> H[Recharge History]
+    F --> D[Dashboard]
+    R --> DB[(PostgreSQL Database)]
+    H --> DB
+    A --> DB
+```

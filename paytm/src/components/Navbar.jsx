@@ -2,16 +2,21 @@
 
 import { useRouter } from "next/navigation";
 import { logout } from "@/services/auth";
+import toast from "react-hot-toast";
+
 
 export default function Navbar() {
     const router = useRouter();
 
     async function handleLogout() {
         try {
-            await logout();
+            const response = await logout();
+            if(response.data.success){
+                toast.success("Logged out successfully");
+            }
             router.replace("/login");
         } catch (err) {
-            console.log(err);
+            toast.error( err.response?.data?.message || "Failed to log out" );
         }
     }
 
