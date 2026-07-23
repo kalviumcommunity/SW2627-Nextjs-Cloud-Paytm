@@ -13,6 +13,7 @@ export default function RechargeHistory({ filters, refreshKey }) {
     pending: 0,
     failed: 0,
 });
+const [hasPending , setHaspending] = useState();
 
     const fetchHistory = async () => {
     try {
@@ -21,6 +22,7 @@ export default function RechargeHistory({ filters, refreshKey }) {
             setRecharge(response.data.recharges);
             setPagination(response.data.pagination);
             setStatistics(response.data.statistics);
+            setHaspending(response.data.hasPending);
         } catch (err) {
             console.log(err);
         }
