@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { logout } from "@/services/auth";
 import toast from "react-hot-toast";
+import ThemeToggle from "./ThemeToggle";
 
 
 export default function Navbar() {
@@ -21,7 +22,7 @@ export default function Navbar() {
     }
 
     return (
-        <nav className="bg-blue-600 text-white shadow-md">
+        <nav className="bg-blue-600 dark:bg-blue-800 text-white shadow-md transition-colors duration-300">
             <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
 
                 {/* Logo / App Name */}
@@ -30,12 +31,17 @@ export default function Navbar() {
                 </h1>
 
                 {/* Logout Button */}
-                <button
-                    onClick={handleLogout}
-                    className="rounded-lg bg-red-500 px-3 py-2 text-sm font-medium transition hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300 sm:px-4 sm:text-base"
-                >
-                    Logout
-                </button>
+                
+                <div className="flex items-center gap-3">
+    <ThemeToggle />
+
+    <button
+        onClick={handleLogout}
+        className="rounded-lg bg-red-500 px-3 py-2 text-sm font-medium transition hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300 sm:px-4 sm:text-base"
+    >
+        Logout
+    </button>
+</div>
 
             </div>
         </nav>

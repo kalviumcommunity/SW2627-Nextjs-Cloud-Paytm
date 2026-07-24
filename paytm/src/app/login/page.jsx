@@ -65,8 +65,8 @@ export default function Login() {
 
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
+    <div className="min-h-screen bg-[var(--background)] flex items-center justify-center px-4 transition-colors duration-300">
+      <div className="w-full max-w-md bg-[var(--surface)] rounded-2xl shadow-xl p-8 transition-colors duration-300">
 
         {/* Heading */}
         <div className="text-center mb-8">
@@ -74,7 +74,7 @@ export default function Login() {
             Recharge System
           </h1>
 
-          <p className="mt-2 text-gray-500">
+          <p className="mt-2 text-[var(--text-secondary)]">
             Welcome Back! Login to continue
           </p>
         </div>
@@ -84,7 +84,7 @@ export default function Login() {
 
           {/* Email */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-[var(--text)] mb-2">
               Email Address
             </label>
            
@@ -92,7 +92,7 @@ export default function Login() {
             <input
               type="email"
               placeholder="Enter your email"
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] text-[var(--text)] placeholder:text-[var(--text-secondary)] px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300" 
               name="email"
               value={formData.email}
               onChange={handleChange}
@@ -106,14 +106,14 @@ export default function Login() {
 
           {/* Password */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-[var(--text)] mb-2">
               Password
             </label>
 
             <input
               type="password"
               placeholder="Enter your password"
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] text-[var(--text)] placeholder:text-[var(--text-secondary)] px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300"
               name="password"
               value={formData.password}
               onChange={handleChange}
@@ -128,14 +128,14 @@ export default function Login() {
           <button
     type="submit"
     disabled={loading}
-    className="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white disabled:bg-gray-400"
+    className="w-full rounded-lg bg-blue-600 hover:bg-blue-700 py-3 font-semibold text-white transition-colors duration-300 disabled:cursor-not-allowed disabled:bg-gray-400"
 >
     {loading ? "Logging in..." : "Login"}
 </button>
 
           {/* Register Link */}
-          <p className="text-center text-sm text-gray-600">
-            Don&apos;t have an account?{" "}
+          <p className="text-center text-sm text-[var(--text-secondary)]">
+            Don't have an account?{" "}
             <Link
               href="/register"
               className="font-semibold text-blue-600 hover:underline"
