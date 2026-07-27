@@ -5,8 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { loginSchema } from "@/validations/authValidation";
 import toast from "react-hot-toast";
-
-
+import ThemeToggle from "@/components/ThemeToggle";
 
 
 export default function Login() {
@@ -65,9 +64,11 @@ export default function Login() {
 
 
   return (
-    <div className="min-h-screen bg-[var(--background)] flex items-center justify-center px-4 transition-colors duration-300">
+    <div className=" relative min-h-screen bg-[var(--background)] flex items-center justify-center px-4 transition-colors duration-300">
+      <div className="absolute right-5 top-5">
+          <ThemeToggle />
+      </div>
       <div className="w-full max-w-md bg-[var(--surface)] rounded-2xl shadow-xl p-8 transition-colors duration-300">
-
         {/* Heading */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-blue-600">

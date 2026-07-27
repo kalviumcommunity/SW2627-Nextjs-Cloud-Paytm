@@ -5,6 +5,8 @@
   --background: #f8fafc;
   --surface: #ffffff;
   --surface-secondary: #f1f5f9;
+  --navbar: #2563eb;
+  --navbar-hover: #1d4ed8;
 
   --primary: #2563eb;
   --primary-hover: #1d4ed8;
@@ -26,6 +28,8 @@
 
   --primary: #2563eb;
   --primary-hover: #3b82f6;
+  --navbar: #1d4ed8;
+  --navbar-hover: #2563eb;
 
   --text: #f8fafc;
   --text-secondary: #cbd5e1;

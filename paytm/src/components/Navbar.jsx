@@ -22,7 +22,7 @@ export default function Navbar() {
     }
 
     return (
-        <nav className="bg-blue-600 dark:bg-blue-800 text-white shadow-md transition-colors duration-300">
+        <nav className="bg-[var(--navbar)] text-white shadow-md transition-colors duration-300">
             <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
 
                 {/* Logo / App Name */}

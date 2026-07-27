@@ -75,15 +75,15 @@ export default function RechargeForm({ onSuccess }) {
   };
 
   return (
-    <section className="mb-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+    <section className="mb-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-sm transition-colors duration-300 sm:p-6">
       
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-xl font-bold text-slate-900 sm:text-2xl">
+        <h2 className="text-xl font-bold text-[var(--text)] sm:text-2xl">
           Make a Recharge
         </h2>
 
-        <p className="mt-1 text-sm text-slate-500">
+        <p className="mt-1 text-sm text-[var(--text-secondary)]">
           Enter the details below to initiate a mobile recharge.
         </p>
       </div>
@@ -97,12 +97,13 @@ export default function RechargeForm({ onSuccess }) {
           <div>
             <label
               htmlFor="mobileNumber"
-              className="mb-2 block text-sm font-medium text-slate-700"
+              className="mb-2 block text-sm font-medium text-[var(--text)]"
             >
               Mobile Number
             </label>
 
             <input
+            
               id="mobileNumber"
               type="text"
               placeholder="Enter mobile number"
@@ -111,7 +112,7 @@ export default function RechargeForm({ onSuccess }) {
               name="mobileNumber"
               value={formData.mobileNumber}
               onChange={handleChange}
-              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-2.5 text-sm text-[var(--text)] placeholder:text-[var(--text-secondary)] outline-none transition-colors duration-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
             />
 
             {errors.mobileNumber && (
@@ -136,7 +137,7 @@ export default function RechargeForm({ onSuccess }) {
               value={formData.operator}
               onChange={handleChange}
               required
-              className="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-2.5 text-sm text-[var(--text)] outline-none transition-colors duration-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
             >
               <option value="">Select Operator</option>
               <option value="JIO">JIO</option>
@@ -162,7 +163,7 @@ export default function RechargeForm({ onSuccess }) {
             </label>
 
             <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-500">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-[var(--text-secondary)]">
                 ₹
               </span>
 
@@ -174,7 +175,7 @@ export default function RechargeForm({ onSuccess }) {
                 name="amount"
                 value={formData.amount}
                 onChange={handleChange}
-                className="w-full rounded-lg border border-slate-300 py-2.5 pl-8 pr-4 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] py-2.5 pl-8 pr-4 text-sm text-[var(--text)] placeholder:text-[var(--text-secondary)] outline-none transition-colors duration-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
               />
             </div>
 
@@ -191,7 +192,7 @@ export default function RechargeForm({ onSuccess }) {
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-200 disabled:cursor-not-allowed disabled:bg-blue-300"
+          className="w-full rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition-colors duration-300 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-200 disabled:cursor-not-allowed disabled:bg-blue-300"
         >
           {loading ? "Processing..." : "Proceed with Recharge"}
         </button>

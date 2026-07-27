@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { registerSchema } from "@/validations/authValidation";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function Register() {
   const router = useRouter();
@@ -58,7 +59,10 @@ export default function Register() {
 
 
   return (
-    <div className="min-h-screen bg-[var(--background)] flex items-center justify-center px-4 py-10 transition-colors duration-300">
+    <div className=" relative min-h-screen bg-[var(--background)] flex items-center justify-center px-4 py-10 transition-colors duration-300">
+      <div className="absolute right-5 top-5">
+      <ThemeToggle />
+      </div>
       <div className="w-full max-w-md bg-[var(--surface)] rounded-2xl shadow-xl p-8 transition-colors duration-300">
 
         {/* Heading */}
