@@ -26,16 +26,19 @@ model User {
 }
 //Recharge table for every user
 model Recharge {
-  id             String   @id @default(uuid())
-  userId         String   
-  user           User     @relation(fields: [userId], references: [id])
-  mobileNumber   String
-  operator       Operator
-  amount         Float
-  status         RechargeStatus @default(PENDING)
-  transactionId  String   @unique
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id                String   @id @default(uuid())
+  userId            String   
+  user              User     @relation(fields: [userId], references: [id])
+  mobileNumber      String
+  operator          Operator
+  amount            Float
+  status            RechargeStatus @default(PENDING)
+  transactionId     String   @unique
+  razorpayOrderId   String?
+  razorpayPaymentId String?
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
   @@index([userId])
   @@index([mobileNumber])
   @@index([status])
