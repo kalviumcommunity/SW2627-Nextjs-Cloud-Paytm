@@ -5,6 +5,22 @@ import { createRecharge } from "@/services/recharge";
 import { rechargeSchema } from "@/validations/rechargeValidation";
 import toast from "react-hot-toast";
 
+const loadRazorpay = ()=> {
+    return new Promise((resolve)=>{
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+
+      script.onload = () =>{
+        resolve(true);
+
+      }
+      script.onerror=()=>{
+        resolve(false);
+      };
+      document.body.appendChild(script);
+    })
+  }
+
 export default function RechargeForm({ onSuccess }) {
   const [formData, setFormData] = useState({
     mobileNumber: "",
@@ -14,6 +30,7 @@ export default function RechargeForm({ onSuccess }) {
 
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+
 
   function handleChange(e) {
     setFormData((prev) => ({
@@ -54,24 +71,129 @@ export default function RechargeForm({ onSuccess }) {
         amount: Number(amount),
       });
 
-      if (response.data.success) {
-        toast.success("Recharge request submitted successfully");
+      if (!response.data.success) {
+        setLoading(false);
+  toast.error(response.data.message ||
+    "Unable to create recharge");
+  return;
+}
 
-        setFormData({
-          mobileNumber: "",
-          operator: "",
-          amount: "",
-        });
+const loaded = await loadRazorpay();
 
+if (!loaded) {
+  setLoading(false);
+  toast.error("Razorpay Checkout failed to load");
+  return;
+}
+
+
+
+const { razorpayOrder } = response.data;
+
+const options = {
+  key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+  amount:razorpayOrder.amount,
+  currency:razorpayOrder.currency,
+  name:"Paytm Dummy",
+  description: `Recharge for ${mobileNumber}`,
+  order_id: razorpayOrder.id,
+  handler: async function (paymentResponse) {
+    try {
+
+      const verify = await fetch("/api/payment/verify" , {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+          razorpay_order_id:paymentResponse.razorpay_order_id,
+          razorpay_payment_id:paymentResponse.razorpay_payment_id,
+          razorpay_signature:paymentResponse.razorpay_signature
+        })
+      });
+      const data = await verify.json();
+
+      if(data.success){
+        setLoading(false)
+        toast.success("Payment verified successfully");
+        
+        setFormData({mobileNumber:"" , 
+          operator:"",
+          amount:""
+        })
         onSuccess();
+      }else{
+        setLoading(false);
+        toast.error("Payment verification failed")
       }
+
+      
     } catch (error) {
+      console.error(error);
+    toast.error("Something went wrong while verifying payment");
+      
+    }
+    
+  },
+  modal:{
+    ondismiss: function (){
+      setLoading(false);
+      toast("Payment cancelled")
+    }
+  }
+};
+const razorpay = new window.Razorpay(options);
+
+razorpay.on("payment.failed", async function (response) {
+  console.log("Payment failed:", response);
+
+  try {
+    const failedPayment = await fetch("/api/payment/failed", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        razorpay_order_id: razorpayOrder.id,
+      }),
+    });
+
+    const data = await failedPayment.json();
+
+    if (data.success) {
+      toast.error(
+        response.error.description || "Payment failed"
+      );
+
+      setFormData({
+        mobileNumber: "",
+        operator: "",
+        amount: "",
+      });
+
+      onSuccess();
+    } else {
+      toast.error("Failed to update recharge status");
+    }
+  } catch (error) {
+    console.error("Failed payment update error:", error);
+    toast.error("Something went wrong");
+  } finally {
+    setLoading(false);
+  }
+});
+
+razorpay.open();
+
+
+        
+      
+    } catch (error) {
+      setLoading(false);
       toast.error(
         error.response?.data?.message || "Something went wrong"
       );
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
 
   return (

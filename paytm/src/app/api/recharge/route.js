@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma"; 
 import { rechargeSchema } from "@/validations/rechargeValidation";
+import {razorpay} from "@/lib/razorpay";
 
 
 export async function POST(req) {
@@ -79,44 +80,35 @@ export async function POST(req) {
     const transactionId =
       "TXN" + Date.now() + Math.floor(Math.random() * 10000);
 
-    // Save recharge
-    const recharge = await prisma.recharge.create({
-      data: {
-        userId: user.id,
-        mobileNumber,
-        operator,
-        amount,
-        transactionId,
-        // status: "PENDING" // Optional, Prisma already defaults it
-      },
+    const razorpayOrder = await razorpay.orders.create({
+      amount:Math.round(amount*100),
+      currency:"INR",
+      receipt:transactionId
     });
 
-    setTimeout(async () => {
-      try {
+    const recharge = await prisma.recharge.create({
+  data: {
+    userId: user.id,
+    mobileNumber,
+    operator,
+    amount,
+    transactionId,
 
-        const status = Math.random()<0.8 ? "SUCCESS" : "FAILED";
+    razorpayOrderId: razorpayOrder.id,
+  },
+});
 
-        await prisma.recharge.update({
-          where:{
-          id:recharge.id},
-          data:{
-          status}
-        })
-        console.log(`${recharge.id} updated status to ${status}`)
-        
-      } catch (error) {
-        console.log(error)
-        
-      }
-
-      
-    }, 5000);
 
     return Response.json(
       {
         success: true,
         message: "Recharge initiated successfully.",
         recharge,
+        razorpayOrder:{
+          id:razorpayOrder.id,
+          amount:razorpayOrder.amount,
+          currency:razorpayOrder.currency
+        }
       },
       {
         status: 201,
