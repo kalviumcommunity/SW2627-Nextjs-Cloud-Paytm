@@ -226,6 +226,8 @@ You can add screenshots of:
 ## 👨‍💻 Author
 
 **Madhav Sukhija**
+**Payal Berwal**
+**Aayaan Choudhary**
 
 Second-Year Computer Science Student
 
