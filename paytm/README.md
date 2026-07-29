@@ -213,13 +213,13 @@ You can add screenshots of:
 ## 🔮 Future Enhancements
 
 - Payment Gateway Integration
+- Dark Mode
 - SMS Notifications
 - Email Notifications
 - User Profile Management
 - Admin Dashboard
 - Analytics Dashboard
 - Recharge Reports
-- Dark Mode
 
 ---
 
@@ -229,7 +229,7 @@ You can add screenshots of:
 **Payal Berwal**
 **Aayaan Choudhary**
 
-Second-Year Computer Science Student
+Second-Year Computer Science Students of kalvium
 
 ---
 
