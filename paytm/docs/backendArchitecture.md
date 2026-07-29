@@ -22,7 +22,6 @@ The Recharge System follows a layered architecture where every request passes th
 
 # Complete Backend Flow
 
-```text
 User
 
 ↓
@@ -116,13 +115,11 @@ Logout
 ↓
 
 JWT Cookie Removed
-```
 
 ---
 
 # Backend Request Flow
 
-```text
 +---------+
 | Client  |
 +---------+
@@ -207,7 +204,15 @@ JWT Cookie Removed
 +---------+
 | Client  |
 +---------+
-```
+
+---
+---
+# Credentials of Card Numbers to Use in Razor Pay
+LINK-https://razorpay.com/docs/payments/payments/test-card-details/?preferred-country=IN
+
+CARD -4100 2800 0000 1007
+CARD -5555 5100 0008 1006
+CARD -5180 2872 0009 1001
 
 ---
 
@@ -310,7 +315,6 @@ Responsibilities:
 
 Payment Flow
 
-```text
 Create Order
 
 ↓
@@ -328,7 +332,6 @@ Verify Signature
 ↓
 
 Payment Verified
-```
 
 ---
 
@@ -369,7 +372,6 @@ Responsibilities:
 
 Lifecycle
 
-```text
 PENDING
 
 ↓
@@ -379,13 +381,11 @@ Processing
 ↓
 
 SUCCESS / FAILED
-```
 
 ---
 
 # Authentication Flow
 
-```text
 Register
 
 ↓
@@ -423,13 +423,11 @@ Logout
 ↓
 
 Cookie Removed
-```
 
 ---
 
 # Recharge & Payment Flow
 
-```text
 User Selects Recharge
 
 ↓
@@ -475,7 +473,6 @@ SUCCESS / FAILED
 ↓
 
 Dashboard Updates Automatically
-```
 
 ---
 

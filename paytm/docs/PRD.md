@@ -2,8 +2,6 @@
 
 # Recharge System
 
-**Version:** 1.0
-
 **Project Type:** Full Stack Web Application
 
 **Frontend:** Next.js + React + Tailwind CSS
