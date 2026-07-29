@@ -41,5 +41,11 @@ export const rechargeSchema = z.object({
       {
         message: "Amount must be greater than 0.",
       }
+    )
+    .refine(
+      (value) => Number(value) < 500001,
+      {
+        message: "Amount must be less than 500000.",
+      }
     ),
 });
