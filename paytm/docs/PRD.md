@@ -301,7 +301,6 @@ The application stores:
 
 # 15. User Flow
 
-```
                     START
                       │
                       ▼
@@ -357,7 +356,6 @@ The application stores:
                  │
                  ▼
                  END
-```
 
 ---
 
@@ -371,13 +369,11 @@ Future versions may include:
 - Water Bill Payments
 - UPI Integration
 - Wallet System
-- Razorpay Integration
 - Email Notifications
 - SMS Notifications
 - Admin Dashboard
 - Analytics Dashboard
 - Monthly Reports
-- Dark Mode
 - Multi-language Support
 
 ---

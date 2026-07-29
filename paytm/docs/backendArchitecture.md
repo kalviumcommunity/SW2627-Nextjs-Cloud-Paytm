@@ -235,7 +235,7 @@ Example Routes:
 - POST `/api/auth/register`
 - POST `/api/auth/login`
 - POST `/api/auth/logout`
-- POST `/api/payment/create-order`
+- POST `/api/payment/failed`
 - POST `/api/payment/verify`
 - POST `/api/recharge`
 - GET `/api/recharge`

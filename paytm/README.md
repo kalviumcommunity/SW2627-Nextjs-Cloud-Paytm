@@ -23,6 +23,8 @@ The Recharge System is designed to simplify the mobile recharge experience while
 - 📈 Transaction Status Tracking
 - 🚪 Secure Logout
 - 📱 Responsive Design
+- Razorpay Integration
+- Dark Mode
 
 ---
 
@@ -54,7 +56,6 @@ The Recharge System is designed to simplify the mobile recharge experience while
 
 ## 📂 Project Structure
 
-```text
 paytm/
 │
 ├── docs/
@@ -80,28 +81,25 @@ paytm/
 │
 ├── package.json
 └── README.md
-```
 
 ---
 
 ## 🏗️ System Architecture
 
-```mermaid
-flowchart LR
+Flowchart LR
     User --> Frontend
     Frontend --> API
     API --> Authentication
     API --> RechargeService
     RechargeService --> Prisma
     Prisma --> PostgreSQL
-```
 
 ---
 
 ## 🔄 Application Workflow
 
-```mermaid
-flowchart TD
+
+Flowchart TD
     Register --> Login
     Login --> Dashboard
     Dashboard --> Recharge
@@ -109,20 +107,18 @@ flowchart TD
     Database --> RechargeHistory
     RechargeHistory --> Dashboard
     Dashboard --> Logout
-```
+
 
 ---
 
 ## 🔐 Authentication Flow
 
-```mermaid
-flowchart TD
+Flowchart TD
     User --> Login
     Login --> VerifyCredentials
     VerifyCredentials --> GenerateJWT
     GenerateJWT --> StoreCookie
     StoreCookie --> ProtectedRoutes
-```
 
 ---
 
@@ -135,7 +131,6 @@ flowchart TD
 | POST | `/api/auth/logout` | Logout user |
 | POST | `/api/recharge` | Create a recharge |
 | GET | `/api/recharge` | Fetch recharge history |
-| GET | `/api/recharge/:id` | Fetch recharge details |
 
 ---
 
@@ -182,6 +177,15 @@ JWT_SECRET=your_secret_key
 ```
 
 ---
+---
+# Credentials of Card Numbers to Use in Razor Pay
+LINK-https://razorpay.com/docs/payments/payments/test-card-details/?preferred-country=IN
+
+CARD -4100 2800 0000 1007
+CARD -5555 5100 0008 1006
+CARD -5180 2872 0009 1001
+
+---
 
 ## ▶️ Run the Development Server
 
@@ -219,15 +223,16 @@ You can add screenshots of:
 - Admin Dashboard
 - Analytics Dashboard
 - Recharge Reports
-- Dark Mode
 
 ---
 
 ## 👨‍💻 Author
 
-**Madhav Sukhija**
+Aayaan Choudhary,
+Madhav Sukhija,
+Payal
 
-Second-Year Computer Science Student
+Second-Year Computer Science Student's
 
 ---
 

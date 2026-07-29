@@ -139,7 +139,6 @@ Dashboard --> ProtectedPages
 ProtectedPages --> Logout
 
 Logout --> CookieDeleted
-```
 
 ---
 
