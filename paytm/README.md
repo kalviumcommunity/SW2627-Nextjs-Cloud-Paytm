@@ -217,6 +217,7 @@ You can add screenshots of:
 ## 🔮 Future Enhancements
 
 - Payment Gateway Integration
+- Dark Mode
 - SMS Notifications
 - Email Notifications
 - User Profile Management
@@ -228,11 +229,11 @@ You can add screenshots of:
 
 ## 👨‍💻 Author
 
-Aayaan Choudhary,
-Madhav Sukhija,
-Payal
+**Madhav Sukhija**
+**Payal Berwal**
+**Aayaan Choudhary**
 
-Second-Year Computer Science Student's
+Second-Year Computer Science Students of kalvium
 
 ---
 
