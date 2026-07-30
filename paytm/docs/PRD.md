@@ -426,3 +426,9 @@ flowchart LR
     H --> DB
     A --> DB
 ```
+
+# 20. Non-Functional Requirements
+
+The system should provide a responsive user interface across desktop and mobile devices.
+API responses should be optimized to ensure fast performance and a smooth user experience.
+The application should be designed with a modular architecture to support future scalability and easy maintenance.
