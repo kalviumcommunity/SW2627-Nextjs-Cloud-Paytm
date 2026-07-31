@@ -101,14 +101,14 @@ export default function Register() {
 
           {/* Email */}
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-700" >
+            <label className="block mb-2 text-sm font-medium text-[var(--text)]">
               Email Address
             </label>
 
             <input
               type="email"
               placeholder="Enter your email"
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] text-[var(--text)] placeholder:text-[var(--text-secondary)] px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300"
               name="email" value={formData.email} onChange={handleChange}
             />
           </div>
@@ -120,14 +120,14 @@ export default function Register() {
 
           {/* Phone Number */}
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-700">
+            <label className="block mb-2 text-sm font-medium text-[var(--text)]">
               Phone Number
             </label>
 
             <input
               type="tel"
               placeholder="Enter your phone number"
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] text-[var(--text)] placeholder:text-[var(--text-secondary)] px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300"
                name="phoneNumber" value={formData.phoneNumber} onChange={handleChange}
             />
           </div>
@@ -138,14 +138,14 @@ export default function Register() {
 
           {/* Password */}
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-700" >
+            <label className="block mb-2 text-sm font-medium text-[var(--text)]">
               Password
             </label>
 
             <input
               type="password"
               placeholder="Create a password"
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] text-[var(--text)] placeholder:text-[var(--text-secondary)] px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300"
               name="password" value={formData.password} onChange={handleChange}
             />
           </div>
@@ -156,14 +156,14 @@ export default function Register() {
 
           {/* Confirm Password */}
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-700" >
+            < label className="block mb-2 text-sm font-medium text-[var(--text)]">
               Confirm Password
             </label>
 
             <input
               type="password"
               placeholder="Confirm your password"
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] text-[var(--text)] placeholder:text-[var(--text-secondary)] px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300"
               name="confirmPassword" value={formData.confirmPassword} onChange={handleChange}
             />
           </div>
@@ -175,7 +175,7 @@ export default function Register() {
           {/* Register Button */}
           <button
             type="submit"
-            className="w-full rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 transition-colors duration-300"
+            className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] text-[var(--text)] placeholder:text-[var(--text-secondary)] px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300"
           >
             Register
           </button>

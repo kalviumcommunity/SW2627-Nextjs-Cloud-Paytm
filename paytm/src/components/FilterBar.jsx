@@ -58,7 +58,7 @@ export default function FilterBar({
                 <div>
                     <label
                         htmlFor="date"
-                        className="mb-2 block text-sm font-medium text-slate-700"
+                        className="mb-2 block text-sm font-medium text-[var(--text)]"
                     >
                         Date
                     </label>
