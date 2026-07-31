@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma"; 
 import { rechargeSchema } from "@/validations/rechargeValidation";
-import {razorpay} from "@/lib/razorpay";
+import { getRazorpay } from "@/lib/razorpay";
 
 
 export async function POST(req) {
@@ -79,6 +79,8 @@ export async function POST(req) {
     // Generate transaction ID
     const transactionId =
       "TXN" + Date.now() + Math.floor(Math.random() * 10000);
+
+      const razorpay = getRazorpay();
 
     const razorpayOrder = await razorpay.orders.create({
       amount:Math.round(amount*100),

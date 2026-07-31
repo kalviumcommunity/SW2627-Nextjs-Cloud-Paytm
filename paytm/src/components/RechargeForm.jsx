@@ -138,6 +138,12 @@ const options = {
   modal:{
     ondismiss: function (){
       setLoading(false);
+      setFormData({
+        mobileNumber: "",
+        operator: "",
+        amount: "",
+      });
+
       toast("Payment cancelled")
     }
   }
