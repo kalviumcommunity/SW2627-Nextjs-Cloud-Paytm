@@ -248,7 +248,7 @@ razorpay.open();
           <div>
             <label
               htmlFor="operator"
-              className="mb-2 block text-sm font-medium text-slate-700"
+              className="mb-2 block text-sm font-medium text-[var(--text)]"
             >
               Operator
             </label>
@@ -279,7 +279,7 @@ razorpay.open();
           <div>
             <label
               htmlFor="amount"
-              className="mb-2 block text-sm font-medium text-slate-700"
+              className="mb-2 block text-sm font-medium text-[var(--text)]"
             >
               Amount
             </label>
