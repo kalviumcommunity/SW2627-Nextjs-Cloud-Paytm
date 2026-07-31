@@ -6,6 +6,7 @@ import { registerSchema } from "@/validations/authValidation";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import ThemeToggle from "@/components/ThemeToggle";
+import { useTheme } from "next-themes";
 
 export default function Register() {
   const router = useRouter();
@@ -175,7 +176,7 @@ export default function Register() {
           {/* Register Button */}
           <button
             type="submit"
-            className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] text-[var(--text)] placeholder:text-[var(--text-secondary)] px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300"
+            className="w-full rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition-colors duration-300 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             Register
           </button>
