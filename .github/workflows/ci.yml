@@ -11,9 +11,9 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-  defaults:
-    run:
-      working-directory: paytm  
+    defaults:
+      run:
+        working-directory: paytm  
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
