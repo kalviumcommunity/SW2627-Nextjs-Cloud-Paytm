@@ -22,6 +22,7 @@ jobs:
         with:
           node-version: 22
           cache: npm
+          cache-dependency-path: paytm/package-lock.json
 
       - name: Install depedencies
         run: npm ci
