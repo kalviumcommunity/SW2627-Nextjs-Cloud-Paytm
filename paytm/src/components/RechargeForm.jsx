@@ -144,7 +144,7 @@ const options = {
         amount: "",
       });
 
-      toast("Payment cancelled")
+      toast("Payment cancelled");
     }
   }
 };
@@ -215,6 +215,32 @@ razorpay.open();
           Enter the details below to initiate a mobile recharge.
         </p>
       </div>
+       {/* Test Payment Information */}
+  <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 p-4">
+    <p className="text-sm font-semibold text-blue-900">
+      Test Mode
+    </p>
+
+    <p className="mt-1 text-sm text-blue-800">
+      This application uses Razorpay Test Mode. No real money will be charged.
+    </p>
+
+    <div className="mt-3 text-sm text-blue-800">
+      <p className="font-medium">For testing payments:</p>
+
+      <ul className="mt-1 list-disc space-y-1 pl-5">
+        <li>
+          Card Number:{" "}
+          <span className="font-mono font-medium">
+            4100 2800 0000 1007
+          </span>
+        </li>
+        <li>
+          Use any future expiry date and any CVV.
+        </li>
+      </ul>
+    </div>
+  </div>
 
       <form className="space-y-5" onSubmit={handleSubmit}>
 
