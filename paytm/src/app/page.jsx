@@ -49,22 +49,22 @@ export default function Home() {
 
           <div className="flex items-center gap-3">
             <span className="text-green-600 text-xl">✔</span>
-            <span>Live Transaction Tracking</span>
+            <span className="text-gray-700">Live Transaction Tracking</span>
           </div>
 
           <div className="flex items-center gap-3">
             <span className="text-green-600 text-xl">✔</span>
-            <span>Recharge History</span>
+            <span className="text-gray-700">Recharge History</span>
           </div>
 
           <div className="flex items-center gap-3">
             <span className="text-green-600 text-xl">✔</span>
-            <span>Smart Filters</span>
+            <span className="text-gray-700">Smart Filters</span>
           </div>
 
           <div className="flex items-center gap-3">
             <span className="text-green-600 text-xl">✔</span>
-            <span>Duplicate Recharge Protection</span>
+            <span className="text-gray-700">Duplicate Recharge Protection</span>
           </div>
 
         </div>

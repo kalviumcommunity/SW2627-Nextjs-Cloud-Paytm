@@ -8,7 +8,7 @@ export default function StatusBadge({ status }) {
   return (
     <span
       className={`px-3 py-1 rounded-full text-sm font-semibold ${
-        styles[status] || "bg-gray-100 text-gray-700"
+        styles[status] || "bg-[var(--surface-secondary)] text-[var(--text)]"
       }`}
     >
       {status}

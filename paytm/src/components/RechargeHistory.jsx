@@ -54,15 +54,15 @@ const [hasPending , setHaspending] = useState();
     return () => clearInterval(interval);
 }, [hasPending, filters, page]);
     return (
-        <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
+        <section className="mt-8 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm transition-colors duration-300 sm:p-6">
 
             {/* Header */}
             <div className="mb-6">
-                <h2 className="text-xl font-bold text-slate-900 sm:text-2xl">
+                <h2 className="text-xl font-bold text-[var(--text)] sm:text-2xl">
                     Recharge History
                 </h2>
 
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-1 text-sm text-[var(--text-secondary)]">
                     View and track your recent recharge transactions.
                 </p>
             </div>
@@ -118,45 +118,45 @@ const [hasPending , setHaspending] = useState();
 
             {/* Table */}
             {recharges.length === 0 ? (
-                <div className="rounded-xl border border-dashed border-slate-300 py-10 text-center">
-                    <p className="font-medium text-slate-600">
+                <div className="rounded-xl border border-dashed border-[var(--border)] py-10 text-center">
+                    <p className="font-medium text-[var(--text)]">
                         No recharge history found.
                     </p>
 
-                    <p className="mt-1 text-sm text-slate-400">
+                    <p className="mt-1 text-sm text-[var(--text-secondary)]">
                         Try changing your filters or make your first recharge.
                     </p>
                 </div>
             ) : (
-                <div className="overflow-x-auto rounded-xl border border-slate-200">
+                <div className="overflow-x-auto rounded-xl border border-[var(--border)]">
                     <table className="min-w-[850px] w-full">
-                        <thead className="bg-slate-50">
+                        <thead className="bg-[var(--surface-secondary)]">
                             <tr>
-                                <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)]">
                                     Transaction ID
                                 </th>
 
-                                <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)]">
                                     Mobile
                                 </th>
 
-                                <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)]">
                                     Operator
                                 </th>
 
-                                <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)]">
                                     Amount
                                 </th>
 
-                                <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)]">
                                     Status
                                 </th>
 
-                                <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)]">
                                     Date
                                 </th>
 
-                                <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)]">
                                     Time
                                 </th>
                             </tr>
@@ -169,21 +169,21 @@ const [hasPending , setHaspending] = useState();
                                 return (
                                     <tr
                                         key={recharge.id}
-                                        className="border-t border-slate-100 transition hover:bg-slate-50"
+                                        className="border-t border-[var(--border)] transition-colors duration-300 hover:bg-[var(--surface-secondary)]"
                                     >
-                                        <td className="whitespace-nowrap px-4 py-4 text-sm font-medium text-slate-700">
+                                        <td className="whitespace-nowrap px-4 py-4 text-sm font-medium text-[var(--text)]">
                                             {recharge.transactionId}
                                         </td>
 
-                                        <td className="whitespace-nowrap px-4 py-4 text-sm text-slate-600">
+                                        <td className="whitespace-nowrap px-4 py-4 text-sm text-[var(--text-secondary)]">
                                             {recharge.mobileNumber}
                                         </td>
 
-                                        <td className="whitespace-nowrap px-4 py-4 text-sm text-slate-600">
+                                        <td className="whitespace-nowrap px-4 py-4 text-sm text-[var(--text-secondary)]">
                                             {recharge.operator}
                                         </td>
 
-                                        <td className="whitespace-nowrap px-4 py-4 text-sm font-medium text-slate-700">
+                                        <td className="whitespace-nowrap px-4 py-4 text-sm font-medium text-[var(--text)]">
                                             ₹{recharge.amount}
                                         </td>
 
@@ -193,11 +193,11 @@ const [hasPending , setHaspending] = useState();
                                             />
                                         </td>
 
-                                        <td className="whitespace-nowrap px-4 py-4 text-sm text-slate-600">
+                                        <td className="whitespace-nowrap px-4 py-4 text-sm text-[var(--text-secondary)]">
                                             {date.toLocaleDateString()}
                                         </td>
 
-                                        <td className="whitespace-nowrap px-4 py-4 text-sm text-slate-600">
+                                        <td className="whitespace-nowrap px-4 py-4 text-sm text-[var(--text-secondary)]">
                                             {date.toLocaleTimeString([], {
                                                 hour: "2-digit",
                                                 minute: "2-digit",
@@ -216,7 +216,7 @@ const [hasPending , setHaspending] = useState();
             {/* Pagination */}
             <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
-                <p className="text-center text-sm text-slate-500 sm:text-left">
+                <p className="text-center text-sm text-[var(--text-secondary)] sm:text-left">
                     Page {page} of {pagination.totalPages || 1}
                 </p>
 
@@ -225,7 +225,7 @@ const [hasPending , setHaspending] = useState();
                     <button
                         onClick={() => setPage((prev) => prev - 1)}
                         disabled={page === 1}
-                        className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-sm font-medium text-[var(--text)] transition-colors duration-300 hover:bg-[var(--surface-secondary)] disabled:cursor-not-allowed disabled:opacity-50"
                     >
                         Previous
                     </button>
@@ -235,7 +235,7 @@ const [hasPending , setHaspending] = useState();
                         disabled={
                             page >= (pagination.totalPages ?? 1)
                         }
-                        className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors duration-300 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                         Next
                     </button>

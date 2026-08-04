@@ -1,354 +1,462 @@
-# Recharge System API Documentation
+# Backend Architecture
 
-Version: 1.0
+## Overview
 
----
-
-# Base URL
-
-Development
-
-http://localhost:3000/api
+The Recharge System follows a layered architecture where every request passes through validation, authentication, business logic, payment processing (Razorpay), database operations, and background processing before a response is returned to the client.
 
 ---
 
-# Authentication
+# Technology Stack
 
-The application uses JWT Authentication stored inside an HTTP-only cookie.
+| Layer | Technology |
+|--------|------------|
+| Frontend | Next.js |
+| Backend | Next.js API Routes |
+| Authentication | JWT (HTTP-only Cookies) |
+| Payment Gateway | Razorpay (Test Mode) |
+| ORM | Prisma |
+| Database | PostgreSQL |
+| Background Processing | Background Worker / Scheduler |
 
-Protected Routes require a valid JWT token.
+---
 
-Authentication Flow
+# Complete Backend Flow
+
+User
+
+↓
 
 Register
-      ↓
+
+↓
+
+User Saved in PostgreSQL
+
+↓
+
 Login
-      ↓
-JWT Cookie Created
-      ↓
+
+↓
+
+JWT Generated
+
+↓
+
+JWT Stored in HTTP-only Cookie
+
+↓
+
 Access Protected Routes
-      ↓
+
+↓
+
+Create Recharge Request
+
+↓
+
+Validate Mobile Number & Amount
+
+↓
+
+Check Duplicate Recharge (10 seconds)
+
+↓
+
+Create Razorpay Order
+
+↓
+
+Return Order Details
+
+↓
+
+Open Razorpay Checkout
+
+↓
+
+User Completes Payment
+
+↓
+
+Verify Razorpay Signature
+
+↓
+
+Create Recharge Record
+
+↓
+
+Status = PENDING
+
+↓
+
+Save Recharge in PostgreSQL
+
+↓
+
+Background Worker Processes Recharge
+
+↓
+
+SUCCESS / FAILED
+
+↓
+
+Recharge History Updated
+
+↓
+
+Response Sent to Client
+
+↓
+
 Logout
-      ↓
-Cookie Removed
+
+↓
+
+JWT Cookie Removed
 
 ---
 
-# API Overview
+# Backend Request Flow
 
-| Method | Endpoint | Description | Authentication |
-|----------|------------------------|-----------------------------|---------------|
-| POST | /auth/register | Register new user | ❌ |
-| POST | /auth/login | Login user | ❌ |
-| POST | /auth/logout | Logout user | ✅ |
-| POST | /recharge | Create Recharge | ✅ |
-| GET | /recharge | Get Recharge History | ✅ |
++---------+
+| Client  |
++---------+
+     |
+     | HTTP Request
+     v
++----------------------+
+| Next.js API Routes   |
++----------------------+
+     |
+     | Validate Request
+     v
++----------------------+
+| Authentication (JWT) |
++----------------------+
+     |
+     | Authorized
+     v
++----------------------+
+| Business Logic       |
++----------------------+
+     |
+     +-----------------------------------------+
+     |                                         |
+     | Authentication APIs                     |
+     | Register / Login / Logout               |
+     |                                         |
+     +-----------------------------------------+
+     |
+     +-----------------------------------------+
+     | Recharge APIs                           |
+     |                                         |
+     v
++----------------------+
+| Payment Service      |
++----------------------+
+     |
+     | Create Razorpay Order
+     v
++----------------------+
+| Razorpay Test API    |
++----------------------+
+     |
+     | Payment Completed
+     v
++----------------------+
+| Verify Signature     |
++----------------------+
+     |
+     | Payment Verified
+     v
++----------------------+
+| Recharge Service     |
++----------------------+
+     |
+     | Create Transaction
+     v
++----------------------+
+| Prisma ORM           |
++----------------------+
+     |
+     | SQL Queries
+     v
++----------------------+
+| PostgreSQL Database  |
++----------------------+
+     |
+     | Recharge Stored
+     v
++----------------------+
+| Background Worker    |
++----------------------+
+     |
+     | Update Status
+     v
++----------------------+
+| SUCCESS / FAILED     |
++----------------------+
+     |
+     | API Response
+     v
++---------+
+| Client  |
++---------+
 
+---
+---
+# Credentials of Card Numbers to Use in Razor Pay
+LINK-https://razorpay.com/docs/payments/payments/test-card-details/?preferred-country=IN
+
+CARD -4100 2800 0000 1007
+CARD -5555 5100 0008 1006
+CARD -5180 2872 0009 1001
 
 ---
 
-# 1. Register User
+# Layer Responsibilities
 
-Endpoint
+## 1. Client
 
-POST /api/auth/register
-
-Description
-
-Creates a new user account.
-
-Request Body
-
-```json
-{
-  "name":"Madhav",
-  "email":"madhav@gmail.com",
-  "phone":"9876543210",
-  "password":"Password@123"
-}
-```
-
-Success Response
-
-Status Code
-
-```
-201 Created
-```
-
-Response
-
-```json
-{
-  "success": true,
-  "message": "User registered successfully"
-}
-```
-
-Possible Errors
-
-| Status | Reason |
-|---------|----------------------|
-|400|Missing Fields|
-|409|Email Already Exists|
-|409|Mobile number Already Exists|
-|500|Internal Server Error|
+- Sends API requests.
+- Displays recharge history and payment status.
+- Opens Razorpay Checkout for payment.
 
 ---
 
-# 2. Login User
+## 2. Next.js API Routes
 
-Endpoint
+Responsible for receiving HTTP requests and routing them to the appropriate service.
 
-POST /api/auth/login
+Example Routes:
 
-Description
-
-Authenticates the user and stores JWT inside an HTTP-only cookie.
-
-Request
-
-```json
-{
-  "email":"madhav@gmail.com",
-  "password":"Password@123"
-}
-```
-
-Success Response
-
-```
-200 OK
-```
-
-```json
-{
-  "success": true,
-  "message":"Login Successful"
-}
-```
-
-Cookie
-
-```
-token=<JWT_TOKEN>
-
-HttpOnly = true
-
-Secure = true
-
-SameSite = Lax
-```
-
-Possible Errors
-
-| Status | Reason |
-|---------|----------------------|
-|400|Invalid Credentials|
-|401|Unauthorized|
-|500|Server Error|
+- POST `/api/auth/register`
+- POST `/api/auth/login`
+- POST `/api/auth/logout`
+- POST `/api/payment/failed`
+- POST `/api/payment/verify`
+- POST `/api/recharge`
+- GET `/api/recharge`
 
 ---
 
-# 3. Logout User
+## 3. Validation Layer
 
-Endpoint
+Validates incoming request data before executing business logic.
 
-POST /api/auth/logout
+Examples:
 
-Description
-
-Removes JWT cookie and logs out the user.
-
-Request
-
-No Body Required.
-
-Success Response
-
-```
-200 OK
-```
-
-```json
-{
-    "success":true,
-    "message":"Logged Out Successfully"
-}
-```
-
-Possible Errors
-
-| Status | Reason |
-|---------|----------------|
-|500|Server Error|
+- Required fields
+- Valid email format
+- Mobile number length
+- Password rules
+- Recharge amount greater than zero
 
 ---
 
-# 4. Create Recharge
+## 4. Authentication Layer
 
-Endpoint
+Uses JWT stored inside an HTTP-only cookie.
 
-POST /api/recharge
+Responsibilities:
 
-Description
+- Verify JWT
+- Extract authenticated user
+- Protect private APIs
+- Reject unauthorized requests
 
-Creates a new mobile recharge.
+Protected Routes:
+
+- Logout
+- Create Razorpay Order
+- Verify Payment
+- Create Recharge
+- Get Recharge History
+
+---
+
+## 5. Business Logic Layer
+
+Handles application rules.
 
 Authentication
 
-Required
+- Register users
+- Login users
+- Logout users
 
-Headers
+Recharge
 
-```
-Cookie: token=<JWT>
-```
+- Validate recharge request
+- Prevent duplicate recharge within 10 seconds
+- Generate transaction ID
+- Create recharge record
 
-Request Body
+Payment
 
-```json
-{
-    "mobile":"9876543210",
-    "operator":"Jio",
-    "amount":299
-}
-```
-
-Business Rules
-
-- Mobile number must be 10 digits.
-- Amount must be greater than 0.
-- Duplicate recharge is not allowed within 10 seconds.
-- Status starts as PENDING.
-
-Success Response
-
-```
-201 Created
-```
-
-```json
-{
-    "success":true,
-    "message":"Recharge Initiated",
-    "transactionId":"TXN123456"
-}
-```
-
-Possible Errors
-
-| Status | Reason |
-|---------|----------------------------|
-|400|Invalid Data|
-|401|Unauthorized|
-|409|Duplicate Recharge|
-|500|Server Error|
+- Create Razorpay Order
+- Verify Razorpay Payment Signature
+- Allow recharge creation only after successful payment
 
 ---
 
-# 5. Get Recharge History
+## 6. Razorpay Integration
 
-Endpoint
+The application uses **Razorpay Test Mode**.
 
-GET /api/recharge
+Responsibilities:
 
-Description
+- Create payment order
+- Collect payment
+- Return payment details
+- Verify payment signature
 
-Returns all recharge history of the logged-in user.
+Payment Flow
 
-Authentication
+Create Order
 
-Required
+↓
 
-Success Response
+Open Checkout
 
-```
-200 OK
-```
+↓
 
-```json
-[
-  {
-    "transactionId":"TXN101",
-    "mobile":"9876543210",
-    "operator":"Airtel",
-    "amount":199,
-    "status":"SUCCESS",
-    "createdAt":"2026-07-21T12:30:00Z"
-  },
-  {
-    "transactionId":"TXN102",
-    "mobile":"9999999999",
-    "operator":"Jio",
-    "amount":299,
-    "status":"PENDING",
-    "createdAt":"2026-07-21T12:45:00Z"
-  }
-]
-```
+Complete Payment
 
-Possible Errors
+↓
 
-| Status | Reason |
-|---------|----------------|
-|401|Unauthorized|
-|500|Server Error|
+Verify Signature
+
+↓
+
+Payment Verified
 
 ---
 
+## 7. Prisma ORM
 
-# Status Codes Used
+Acts as the bridge between the backend and PostgreSQL.
 
-| Code | Meaning |
-|------|---------------------------|
-|200|Success|
-|201|Created|
-|400|Bad Request|
-|401|Unauthorized|
-|404|Not Found|
-|409|Conflict|
-|500|Internal Server Error|
+Responsibilities:
+
+- Create users
+- Read recharge history
+- Insert recharge transactions
+- Update recharge status
 
 ---
 
-# Authentication Middleware
+## 8. PostgreSQL Database
 
-Protected APIs
+Stores all persistent application data.
 
-- POST /api/auth/logout
-- POST /api/recharge
-- GET /api/recharge
+Tables include:
 
-Flow
+- Users
+- Recharge Transactions
 
-Client
+---
+
+## 9. Background Worker
+
+Runs independently of the client request.
+
+Responsibilities:
+
+- Process pending recharges
+- Simulate operator processing
+- Update recharge status
+- Notify dashboard with latest status
+
+Lifecycle
+
+PENDING
 
 ↓
 
-JWT Cookie
+Processing
 
 ↓
 
-Auth Middleware
+SUCCESS / FAILED
+
+---
+
+# Authentication Flow
+
+Register
 
 ↓
 
-Verify Token
+Login
 
 ↓
 
-User Authorized
+JWT Created
+
+↓
+
+JWT Stored in Cookie
+
+↓
+
+Protected API Request
+
+↓
+
+JWT Verification
+
+↓
+
+Authorized
 
 ↓
 
 API Executes
 
+↓
+
+Logout
+
+↓
+
+Cookie Removed
+
 ---
 
-# Recharge Lifecycle
+# Recharge & Payment Flow
 
-User Creates Recharge
+User Selects Recharge
+
+↓
+
+Create Recharge Request
+
+↓
+
+Validate Request
+
+↓
+
+Create Razorpay Order
+
+↓
+
+Razorpay Checkout Opens
+
+↓
+
+User Pays
+
+↓
+
+Verify Razorpay Signature
+
+↓
+
+Create Recharge Transaction
 
 ↓
 
@@ -368,69 +476,16 @@ Dashboard Updates Automatically
 
 ---
 
-# Error Response Format
+# Advantages of This Architecture
 
-```json
-{
-    "success":false,
-    "message":"Error Description"
-}
-```
-
----
-
-# Success Response Format
-
-```json
-{
-    "success":true,
-    "message":"Operation Successful",
-    "data":{}
-}
-```
-
----
-
-# Future APIs
-
-- PUT /api/profile
-- GET /api/profile
-- DELETE /api/account
-- POST /api/recharge/cancel
-- GET /api/dashboard/stats
-- GET /recharge/:id
-
-+---------+
-|  Client |
-+---------+
-     |
-     | HTTP Request
-     v
-+------------------+
-| Next.js API Route|
-+------------------+
-     |
-     | Validate Request
-     v
-+------------------+
-| Authentication   |
-|  (JWT Cookie)    |
-+------------------+
-     |
-     | Authorized
-     v
-+------------------+
-| Business Logic   |
-+------------------+
-     |
-     | Prisma ORM
-     v
-+------------------+
-| PostgreSQL DB    |
-+------------------+
-     |
-     | Response
-     v
-+---------+
-| Client  |
-+---------+
+- Layered and modular design
+- Secure JWT authentication
+- Secure payment handling with Razorpay
+- Database abstraction using Prisma
+- Easy to maintain and extend
+- Background processing for recharge updates
+- Scalable architecture suitable for future enhancements
+- Clear separation of concerns, making debugging and testing easier.
+- API routes, services, and database layers can be developed independently by different team members.
+- Consistent request validation and centralized authentication improve application reliability and security.
+- Designed to support future features such as multiple payment gateways, additional recharge operators, notifications, and analytics with minimal architectural changes.

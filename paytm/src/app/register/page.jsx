@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { registerSchema } from "@/validations/authValidation";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import ThemeToggle from "@/components/ThemeToggle";
+import { useTheme } from "next-themes";
 
 export default function Register() {
   const router = useRouter();
@@ -58,8 +60,11 @@ export default function Register() {
 
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-10">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
+    <div className=" relative min-h-screen bg-[var(--background)] flex items-center justify-center px-4 py-10 transition-colors duration-300">
+      <div className="absolute right-5 top-5">
+      <ThemeToggle />
+      </div>
+      <div className="w-full max-w-md bg-[var(--surface)] rounded-2xl shadow-xl p-8 transition-colors duration-300">
 
         {/* Heading */}
         <div className="text-center mb-8">
@@ -67,7 +72,7 @@ export default function Register() {
             Recharge System
           </h1>
 
-          <p className="mt-2 text-gray-500">
+          <p className="mt-2 text-[var(--text-secondary)]">
             Create your account
           </p>
         </div>
@@ -77,14 +82,14 @@ export default function Register() {
 
           {/* Full Name */}
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-700">
+            <label className="block mb-2 text-sm font-medium text-[var(--text)]">
               Full Name
             </label>
 
             <input
               type="text"
               placeholder="Enter your full name"
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] text-[var(--text)] placeholder:text-[var(--text-secondary)] px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300"
               name="name"
               value={formData.name}
               onChange={handleChange}
@@ -97,14 +102,14 @@ export default function Register() {
 
           {/* Email */}
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-700" >
+            <label className="block mb-2 text-sm font-medium text-[var(--text)]">
               Email Address
             </label>
 
             <input
               type="email"
               placeholder="Enter your email"
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] text-[var(--text)] placeholder:text-[var(--text-secondary)] px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300"
               name="email" value={formData.email} onChange={handleChange}
             />
           </div>
@@ -116,14 +121,14 @@ export default function Register() {
 
           {/* Phone Number */}
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-700">
+            <label className="block mb-2 text-sm font-medium text-[var(--text)]">
               Phone Number
             </label>
 
             <input
               type="tel"
               placeholder="Enter your phone number"
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] text-[var(--text)] placeholder:text-[var(--text-secondary)] px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300"
                name="phoneNumber" value={formData.phoneNumber} onChange={handleChange}
             />
           </div>
@@ -134,14 +139,14 @@ export default function Register() {
 
           {/* Password */}
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-700" >
+            <label className="block mb-2 text-sm font-medium text-[var(--text)]">
               Password
             </label>
 
             <input
               type="password"
               placeholder="Create a password"
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] text-[var(--text)] placeholder:text-[var(--text-secondary)] px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300"
               name="password" value={formData.password} onChange={handleChange}
             />
           </div>
@@ -152,14 +157,14 @@ export default function Register() {
 
           {/* Confirm Password */}
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-700" >
+            < label className="block mb-2 text-sm font-medium text-[var(--text)]">
               Confirm Password
             </label>
 
             <input
               type="password"
               placeholder="Confirm your password"
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] text-[var(--text)] placeholder:text-[var(--text-secondary)] px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300"
               name="confirmPassword" value={formData.confirmPassword} onChange={handleChange}
             />
           </div>
@@ -171,13 +176,13 @@ export default function Register() {
           {/* Register Button */}
           <button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-300"
+            className="w-full rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition-colors duration-300 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             Register
           </button>
 
           {/* Login Link */}
-          <p className="text-center text-sm text-gray-600">
+          <p className="text-center text-sm text-[var(--text-secondary)]">
             Already have an account?{" "}
             <Link
               href="/login"

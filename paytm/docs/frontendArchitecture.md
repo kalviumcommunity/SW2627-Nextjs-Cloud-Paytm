@@ -1,9 +1,5 @@
 # Recharge System Frontend Architecture
 
-Version: 1.0
-
----
-
 # Overview
 
 The Recharge System frontend is built using **Next.js App Router** and **React**. It provides an intuitive interface for user authentication, mobile recharge, recharge history, transaction tracking, and dashboard management.
@@ -27,16 +23,17 @@ The frontend communicates with the backend using REST APIs and uses JWT stored i
 
 # Frontend Folder Structure
 
-```text
 src
 │
 ├── app
 │   ├── api
 │   │   ├── auth
 │   │   └── recharge
+|   |   ├──payment
 │   │
 │   ├── dashboard
 │   │   └── page.jsx
+|   |   ├──Dashboard.jsx
 │   │
 │   ├── login
 │   │   └── page.jsx
@@ -54,15 +51,16 @@ src
 │   ├── RechargeHistory.jsx
 │   ├── FilterBar.jsx
 │   ├── StatusBadge.jsx
-│   └── SummaryCards.jsx
-```
+│   └── WelcomeSection.jsx
+|   ├── ThemeProvider.jsx
+|   ├──ThemeToggle.jsx
 
 ---
 
 # Frontend Architecture
 
-```mermaid
-flowchart LR
+
+Flowchart LR
 
 A[User]
 
@@ -75,14 +73,14 @@ C --> D[REST API Calls]
 D --> E[Backend APIs]
 
 E --> F[(PostgreSQL Database)]
-```
+
 
 ---
 
 # Application Routing
 
-```mermaid
-flowchart TD
+
+Flowchart TD
 
 Home["Landing Page"]
 
@@ -99,20 +97,17 @@ Dashboard --> Recharge
 Dashboard --> RechargeHistory
 
 Dashboard --> Logout
-```
+
 
 ---
 
 # Component Hierarchy
 
-```mermaid
-flowchart TD
+Flowchart TD
 
 Dashboard
 
 Dashboard --> Navbar
-
-Dashboard --> SummaryCards
 
 Dashboard --> RechargeForm
 
@@ -121,14 +116,13 @@ Dashboard --> FilterBar
 Dashboard --> RechargeHistory
 
 RechargeHistory --> StatusBadge
-```
+
 
 ---
 
 # Authentication Flow
 
-```mermaid
-flowchart TD
+Flowchart TD
 
 User
 
@@ -145,14 +139,13 @@ Dashboard --> ProtectedPages
 ProtectedPages --> Logout
 
 Logout --> CookieDeleted
-```
 
 ---
 
 # Recharge Workflow
 
-```mermaid
-flowchart TD
+
+Flowchart TD
 
 User
 
@@ -167,18 +160,14 @@ RechargeAPI --> Database
 Database --> TransactionCreated
 
 TransactionCreated --> DashboardUpdated
-```
 
 ---
 
 # Dashboard Workflow
 
-```mermaid
-flowchart LR
+Flowchart LR
 
 Dashboard
-
-Dashboard --> SummaryCards
 
 Dashboard --> RechargeForm
 
@@ -187,14 +176,12 @@ Dashboard --> FilterBar
 Dashboard --> RechargeHistory
 
 RechargeHistory --> StatusBadge
-```
 
 ---
 
 # API Communication Flow
 
-```mermaid
-flowchart TD
+Flowchart TD
 
 ReactComponent
 
@@ -209,14 +196,13 @@ Database --> APIResponse
 APIResponse --> ReactComponent
 
 ReactComponent --> UpdateUI
-```
 
 ---
 
 # Frontend Request Lifecycle
 
-```mermaid
-flowchart TD
+
+Flowchart TD
 
 UserAction
 
@@ -233,14 +219,13 @@ Database --> Response
 Response --> ReactState
 
 ReactState --> RenderUI
-```
 
 ---
 
 # State Management Flow
 
-```mermaid
-flowchart LR
+
+Flowchart LR
 
 UserInput
 
@@ -253,7 +238,6 @@ APIRequest --> APIResponse
 APIResponse --> StateUpdated
 
 StateUpdated --> UIUpdated
-```
 
 ---
 
@@ -288,23 +272,18 @@ StateUpdated --> UIUpdated
 - Protected Dashboard Routes
 - Client-side Input Validation
 - Secure API Communication
+- Pagination for Recharge History
 
 ---
 
 # Future Enhancements
 
-- Dark Mode
 - User Profile Management
 - Download Recharge Receipts
 - Real-Time Status Updates using WebSockets
-- Pagination for Recharge History
 - Mobile Responsive Enhancements
 
-
-
-
-```mermaid
-flowchart LR
+Flowchart LR
 
 subgraph Client["Client Layer"]
     User([User])
@@ -316,8 +295,8 @@ subgraph Frontend["Frontend (Next.js + React)"]
     Register[Register Page]
     Dashboard[Dashboard]
 
+
     Navbar[Navbar]
-    Summary[Summary Cards]
     Recharge[Recharge Form]
     Filter[Filter Bar]
     History[Recharge History]
@@ -341,7 +320,6 @@ Landing --> Register
 Login --> Dashboard
 
 Dashboard --> Navbar
-Dashboard --> Summary
 Dashboard --> Recharge
 Dashboard --> Filter
 Dashboard --> History
@@ -361,4 +339,3 @@ Prisma --> DB
 DB --> Prisma
 Prisma --> API
 API --> Dashboard
-```
