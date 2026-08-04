@@ -25,7 +25,7 @@ jobs:
           cache-dependency-path: paytm/package-lock.json
 
       - name: Install depedencies
-        run: npm ci
+        run: npm install --prefer-dedupe
 
       - name: Run tests
         run: npm test       
