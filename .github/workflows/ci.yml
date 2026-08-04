@@ -11,6 +11,9 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: paytm  
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -19,9 +22,10 @@ jobs:
         with:
           node-version: 22
           cache: npm
+          cache-dependency-path: paytm/package-lock.json
 
       - name: Install depedencies
-        run: npm ci
+        run: npm install --prefer-dedupe
 
       - name: Run tests
         run: npm test       
