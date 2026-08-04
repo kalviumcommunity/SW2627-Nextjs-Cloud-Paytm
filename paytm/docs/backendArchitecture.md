@@ -489,3 +489,14 @@ Dashboard Updates Automatically
 - API routes, services, and database layers can be developed independently by different team members.
 - Consistent request validation and centralized authentication improve application reliability and security.
 - Designed to support future features such as multiple payment gateways, additional recharge operators, notifications, and analytics with minimal architectural changes.
+
+# Performance Optimizations
+
+- The backend improves performance using:
+
+Database indexing
+Optimized Prisma queries
+Pagination for recharge history
+HTTP-only cookies
+Duplicate recharge prevention
+Lightweight JSON responses
